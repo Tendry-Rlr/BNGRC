@@ -4,6 +4,8 @@ $page_title = 'BNGRC - Accueil';
 $baseUrl = $baseUrl ?? '';
 ?>
 
+<a href=""></a>
+
 <div class="list-group">
   <a href="#" class="list-group-item active">Liste des Regions</a>
   <?php foreach($listeRegion as $l){ ?>
