@@ -80,4 +80,18 @@ class AchatModel
         ];
     }
 
+    public function getAchatTotaux(){
+        $sql = "select * from Achat  join V_Besoin on Achat.id_Besoin = V_Besoin.id_Besoin where V_Besoin.id_Besoin in (select id_Besoin from V_Besoin where quantite = 0)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);    
+    }
+
+    public function getSumAchatTotaux(){
+        $sql = "select sum(montant) as sum  from Achat where id_Besoin in (select id_Besoin from Besoin where quantite = 0)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);  
+    }
+
 }

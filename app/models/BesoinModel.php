@@ -68,4 +68,17 @@ class BesoinModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getBesoinRestant(){
+        $sql = "SELECT * FROM V_Besoin WHERE quantite > 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);    
+    }
+    public function getSumBesoinRestant(){
+        $sql = "SELECT id_Besoin , sum(prix_Unitaire*quantite) AS sum FROM V_Besoin WHERE quantite > 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);   
+    }
+
 }

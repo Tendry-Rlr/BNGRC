@@ -15,7 +15,7 @@ CREATE OR REPLACE TABLE Ville(
 );
 
 CREATE OR REPLACE TABLE Besoin_Categorie(
-    id_Besoin_Categorie int primary key auto_increment,z
+    id_Besoin_Categorie int primary key auto_increment,
     libelle varchar(50)
 );
 

@@ -11,11 +11,3 @@ CREATE OR REPLACE TABLE Achat(
     quantite double,
     montant double
 );
-
-CREATE OR REPLACE TABLE Achat_Entente(
-    id_Achat_Entente int primary key auto_increment,
-    id_Achat int references Achat(id_Achat),
-    partenaire varchar(100),
-    montant_entente double,
-    date_entente date
-);
