@@ -14,9 +14,9 @@ class BesoinModel
         $this->db = $db;
     }
 
-    public function getAllRegion()
+    public function getAllBesoin()
     {
-        $sql = "SELECT * FROM Region";
+        $sql = "SELECT * FROM V_Besoin";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
