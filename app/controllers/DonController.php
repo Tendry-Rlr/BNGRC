@@ -28,9 +28,6 @@ class DonController
         $donne = Flight::request()->data->dons; 
         $quantite = Flight::request()->data->quantite;
 
-        $besoin = new BesoinModel(Flight::db());
-        $listeBesoin = $besoin->getAllBesoin();
-
         $don->insertDon($donne, $quantite);
 
         Flight::redirect('/don');
