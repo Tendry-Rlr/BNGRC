@@ -27,9 +27,9 @@ INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite) VALUES
     (3, 3, 3, 50.0),
     (4, 4, 4, 10.0);
 
-INSERT INTO Don (id_Don, id_Besoin) VALUES
-    (1, 1),
-    (2, 3),
-    (3, 4);
+INSERT INTO Don (id_Don, id_Besoin, date_Dispatch) VALUES
+    (1, 1, '2026-02-10'),
+    (2, 3, '2026-02-12'),
+    (3, 4, '2026-02-15');
 
 -- Fin des donnees de test
