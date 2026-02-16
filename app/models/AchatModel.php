@@ -21,6 +21,7 @@ class AchatModel
 
         $don = new DonModel(Flight::db());
         $prixDon = $don->getDonByIdBesoinFille($besoinById)['quantite'];
+        return $prixDon;
     }
 
     protected function getPourcentageByCategory($id_besoin_categorie)
