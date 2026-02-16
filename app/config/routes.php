@@ -5,6 +5,8 @@ use flight\Engine;
 use flight\net\Router;
 
 use app\controllers\RegionController;
+use app\controllers\VilleController;
+use app\controllers\BesoinController;
 
 
 /** 
@@ -17,5 +19,11 @@ $router->group('', function (Router $router) use ($app) {
 
     $region = new RegionController();
     $router->get('/', [$region, 'listeRegion']);
+
+    $ville = new VilleController();
+    $router->get('/ville/@id' , [$ville, 'listeVilleByRegion']);
+
+    $besoin = new BesoinController();
+    $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
 
 }, [SecurityHeadersMiddleware::class]);
