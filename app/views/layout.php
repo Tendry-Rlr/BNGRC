@@ -36,6 +36,7 @@ $isAdmin = !empty($isAdminUser ?? false);
           <?php else: ?>
             <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>">Connexion</a></li>
             <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/register">Inscription</a></li>
+            <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/addbesoin">Ajouter besoin</a></li>
           <?php endif; ?>
         </ul>
       </div>

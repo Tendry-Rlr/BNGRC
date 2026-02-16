@@ -3,21 +3,13 @@
 namespace app\controllers;
 
 use app\models\BesoinModel;
+use app\models\VilleModel;
 use Flight;
 
 class BesoinController
 {
-    public function listeBesoin()
+    public function insertBesoin()
     {
-        $besoin = new BesoinModel(Flight::db());
-        $liste = $besoin->getAllBesoin();
-        Flight::render('index', [
-            'listeBesoin' => $liste,
-            'baseUrl' => Flight::get('flight.base_url'),
-        ]);
-    }
-
-    public function insertBesoin() {
         $id_besoin_categorie = Flight::request()->data->id_besoin_categorie;
         $id_ville = Flight::request()->data->id_ville;
         $quantite = Flight::request()->data->quantite;
@@ -26,5 +18,20 @@ class BesoinController
         $besoin = new BesoinModel(Flight::db());
         $besoin->saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom);
         Flight::redirect('/');
+    }
+
+    public function loadInsert()
+    {
+        $besoin = new BesoinModel(Flight::db());
+        $categories = $besoin->getAllBesoinCategories();
+
+        $ville = new VilleModel(Flight::db());
+        $villes = $ville->getAllVille();
+
+        Flight::render('besoin-form', [
+            'besoinCategories' => $categories,
+            'villes' => $villes,
+            'baseUrl' => Flight::get('flight.base_url'),
+        ]);
     }
 }

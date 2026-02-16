@@ -24,4 +24,9 @@ $router->group('', function (Router $router) use ($app) {
     $router->get('/ville/@id' , [$ville, 'listeVilleByRegion']);
     $router->get('/besoinville/@id', [$ville , 'listeBesoinByVille']);
 
+    $besoin = new BesoinController();
+    $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
+    $router->get('/addbesoin', [$besoin, 'loadInsert']);
+    $router->post('/insertBesoin', [$besoin, 'insertBesoin']);
+
 }, [SecurityHeadersMiddleware::class]);
