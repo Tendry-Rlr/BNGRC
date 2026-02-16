@@ -31,3 +31,8 @@ CREATE OR REPLACE TABLE Besoin(
     id_Besoin_Fille int references Besoin_Fille(id_Besoin_Fille),
     quantite double
 );
+
+CREATE OR REPLACE TABLE Don(
+    id_Don int primary key auto_increment,
+    id_Besoin int references Besoin(id_Besoin)
+);
