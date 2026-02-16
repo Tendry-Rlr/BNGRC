@@ -22,14 +22,15 @@ CREATE OR REPLACE TABLE Besoin_Categorie(
 CREATE OR REPLACE TABLE Besoin_Fille(
     id_Besoin_Fille int primary key auto_increment,
     id_Besoin_Categorie int references Besoin_Categorie(id_Besoin_Categorie),
-    prix_Unitaire double
+    prix_Unitaire double,
 );
 
 CREATE OR REPLACE TABLE Besoin(
     id_Besoin int primary key auto_increment,
     id_Ville int references Ville(id_Ville),
     id_Besoin_Fille int references Besoin_Fille(id_Besoin_Fille),
-    quantite double
+    quantite double,
+    nom_Besoin varchar(50) 
 );
 
 CREATE OR REPLACE TABLE Don(
