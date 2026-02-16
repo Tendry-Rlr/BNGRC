@@ -244,7 +244,7 @@ $isAdmin = !empty($isAdminUser ?? false);
       <button class="mobile-menu-toggle" onclick="toggleSidebar()">
         <i class="bi bi-list"></i> Menu
       </button>
-      <h5 class="mb-0"><?= htmlspecialchars($page_title) ?></h5>
+      <div></div>
       <div>
         <?php if ($isLoggedIn): ?>
           <span class="text-muted">

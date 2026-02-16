@@ -4,8 +4,8 @@ $page_title = 'BNGRC - Formulaire de don';
 $baseUrl = $baseUrl ?? '';
 ?>
 
-<div class="row mb-4">
-  <div class="col-12">
+<div class="row justify-content-center mb-4">
+  <div class="col-lg-10 col-xl-8">
     <div class="card card-modern">
       <div class="card-body">
         <h4 class="card-title mb-3">
@@ -72,28 +72,6 @@ $baseUrl = $baseUrl ?? '';
           <i class="bi bi-list-ul text-primary"></i> Liste des dons effectués
         </h5>
 
-  <?php if (empty($listeDon ?? [])): ?>
-    <div class="alert alert-secondary" role="alert">Aucun don pour le moment.</div>
-  <?php else: ?>
-    <div class="table-responsive">
-      <table id="don-table" class="table table-bordered table-hover align-middle">
-        <thead>
-          <tr>
-            <th>Villes</th>
-            <th>Régions</th>
-            <th>Nom du produit</th>
-            <th>Quantité</th>
-            <th>Date du don</th>
-          </tr>
-        </thead>
-        <tbody>
-                <?php foreach ($listeDon as $don){ ?>
-                <tr>
-                    <td><?= $don['nom_Ville']  ?></td>
-                    <td><?= $don['nom_Region']  ?></td>
-                    <td><?= $don['nom_produit']  ?></td>
-                    <td><?= $don['quantite_don']  ?></td>
-                    <td><?= $don['date_dispatch']  ?></td>
         <?php if (empty($listeDon ?? [])): ?>
           <div class="alert alert-info d-flex align-items-center" role="alert">
             <i class="bi bi-info-circle me-2"></i>
@@ -162,7 +140,6 @@ $baseUrl = $baseUrl ?? '';
     }
 
     catSelect.addEventListener('change', filterRows);
-    // initial filter on load
     filterRows();
   })();
 </script>
@@ -171,31 +148,3 @@ $baseUrl = $baseUrl ?? '';
 $content = ob_get_clean();
 include __DIR__ . '/layout.php';
 ?>
-
-<script>
-    var rows = Array.from(table.querySelectorAll('tbody tr'));
-
-    function filterRows(){
-      var val = catSelect.value;
-      var visible = 0;
-      rows.forEach(function(r){
-        var rc = r.getAttribute('data-cat') || '';
-        if(val === '' || String(rc) === String(val)){
-          r.style.display = '';
-          visible++;
-        } else {
-          r.style.display = 'none';
-        }
-      });
-      if(noResults) noResults.classList.toggle('d-none', visible > 0);
-    }
-
-    catSelect.addEventListener('change', filterRows);
-    // initial filter on load
-    filterRows();
-  })();
-</script>
-
-<?php
-$content = ob_get_clean();
-include __DIR__ . '/layout.php';
