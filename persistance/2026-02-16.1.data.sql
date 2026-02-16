@@ -1,7 +1,7 @@
 -- Donnees de test
 INSERT INTO Region (id_Region, nom_Region) VALUES
-    (1, 'Nord'),
-    (2, 'Sud'),
+    (1, 'Nord', 200.0),
+    (2, 'Sud'), 200.0,
     (3, 'Est');
 
 INSERT INTO Ville (id_Ville, id_Region, nom_Ville) VALUES
@@ -27,9 +27,9 @@ INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite, nom_Besoin) 
     (3, 3, 3, 50.0, 'Tole'),     -- Materiaux: tôle
     (4, 4, 4, 10.0, 'Argent');   -- Argent: fonds
 
-INSERT INTO Don (id_Don, id_Besoin, date_Dispatch) VALUES
-    (1, 1, '2026-02-10'),
-    (2, 3, '2026-02-12'),
-    (3, 4, '2026-02-15');
+INSERT INTO Don (id_Don, id_Besoin_Fille, date_Dispatch, quantite) VALUES
+    (1, 1, '2026-02-10', 200.0),
+    (2, 3, '2026-02-12', 200.0),
+    (3, 4, '2026-02-15', 200.0);
 
 -- Fin des donnees de test
