@@ -14,11 +14,11 @@ class BesoinModel
         $this->db = $db;
     }
 
-    public function getAllBesoin()
+    public function getBesoinByVille($id_ville)
     {
-        $sql = "SELECT * FROM V_Besoin";
+        $sql = "SELECT * FROM V_Besoin where id_Ville = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([':id' => $id_ville]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
