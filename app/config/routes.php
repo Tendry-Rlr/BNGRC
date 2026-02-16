@@ -8,6 +8,7 @@ use app\controllers\RegionController;
 use app\controllers\DonController;
 use app\controllers\VilleController;
 use app\controllers\BesoinController;
+use app\controllers\SimulationController;
 
 
 /** 
@@ -33,5 +34,8 @@ $router->group('', function (Router $router) use ($app) {
     $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
     $router->get('/addbesoin', [$besoin, 'loadInsert']);
     $router->post('/insertBesoin', [$besoin, 'insertBesoin']);
+
+    $simulation = new SimulationController();
+    $router->get('/simulation', [$simulation, 'getSimulation']);
 
 }, [SecurityHeadersMiddleware::class]);

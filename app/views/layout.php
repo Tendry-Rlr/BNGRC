@@ -214,11 +214,6 @@ $isAdmin = !empty($isAdminUser ?? false);
         <span>Accueil</span>
       </a>
 
-      <a href="<?= $baseUrl ?>/" class="sidebar-menu-item">
-        <i class="bi bi-geo-alt"></i>
-        <span>Régions</span>
-      </a>
-
       <div class="sidebar-divider"></div>
 
       <div class="sidebar-section-title">Actions</div>
@@ -231,6 +226,11 @@ $isAdmin = !empty($isAdminUser ?? false);
       <a href="<?= $baseUrl ?>/addbesoin" class="sidebar-menu-item">
         <i class="bi bi-plus-circle"></i>
         <span>Ajouter un besoin</span>
+      </a>
+
+      <a href="<?= $baseUrl ?>/simulation" class="sidebar-menu-item">
+        <i class="bi bi-currency-dollar"></i>
+        <span>Simulation d'achat</span>
       </a>
 
       <div class="sidebar-divider"></div>
