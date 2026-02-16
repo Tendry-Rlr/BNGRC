@@ -233,6 +233,11 @@ $isAdmin = !empty($isAdminUser ?? false);
         <span>Simulation d'achat</span>
       </a>
 
+      <a href="<?= $baseUrl ?>/recapitulation" class="sidebar-menu-item">
+        <i class="bi bi-activity"></i>
+        <span>Recapitulation</span>
+      </a>
+
       <div class="sidebar-divider"></div>
 
     </nav>
