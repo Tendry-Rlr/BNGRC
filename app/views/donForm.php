@@ -69,21 +69,14 @@ $baseUrl = $baseUrl ?? '';
           </tr>
         </thead>
         <tbody>
-                <?php foreach ($listeDon as $don){
-                    $ville = $don['nom_Ville'] ?? $don['nomVille'] ?? $don['ville'] ?? '-';
-                    $region = $don['nom_Region'] ?? $don['nomRegion'] ?? $don['region'] ?? '-';
-                    $produit = $don['nom_produit'] ?? $don['nom_Besoin'] ?? $don['nom'] ?? $don['nom_Don'] ?? '-';
-                    $quantite = $don['quantite_don'] ?? $don['quantite'] ?? '-';
-                    $date = $don['date_dispatch'] ?? $don['date_Dispatch'] ?? $don['created_at'] ?? $don['date'] ?? '-';
-                    $catId = $don['id_Besoin_Categorie'] ?? $don['id_BesoinCategorie'] ?? $don['categorie_id'] ?? $don['id_categorie'] ?? '';
-                ?>
-            <tr data-cat="<?= htmlspecialchars($catId) ?>">
-              <td><?= htmlspecialchars($ville) ?></td>
-              <td><?= htmlspecialchars($region) ?></td>
-              <td><?= htmlspecialchars($produit) ?></td>
-              <td><?= htmlspecialchars($quantite) ?></td>
-              <td><?= htmlspecialchars($date) ?></td>
-            </tr>
+                <?php foreach ($listeDon as $don){ ?>
+                <tr>
+                    <td><?= $don['nom_Ville']  ?></td>
+                    <td><?= $don['nom_Region']  ?></td>
+                    <td><?= $don['nom_produit']  ?></td>
+                    <td><?= $don['quantite_don']  ?></td>
+                    <td><?= $don['date_dispatch']  ?></td>
+                </tr>
                 <?php } ?>
         </tbody>
       </table>

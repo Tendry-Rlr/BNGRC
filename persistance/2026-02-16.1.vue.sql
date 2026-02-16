@@ -29,5 +29,6 @@ LEFT JOIN Besoin_Fille bf ON d.id_Besoin_Fille = bf.id_Besoin_Fille
 LEFT JOIN Besoin b ON bf.id_Besoin_Fille = b.id_Besoin_Fille
 LEFT JOIN Besoin_Categorie bc ON bf.id_Besoin_Categorie = bc.id_Besoin_Categorie
 LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
-LEFT JOIN Region r ON v.id_Region = r.id_Region;
+LEFT JOIN Region r ON v.id_Region = r.id_Region
+ORDER BY d.date_Dispatch DESC;
 

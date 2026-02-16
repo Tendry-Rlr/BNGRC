@@ -1,7 +1,7 @@
 -- Donnees de test
 INSERT INTO Region (id_Region, nom_Region) VALUES
-    (1, 'Nord', 200.0),
-    (2, 'Sud'), 200.0,
+    (1, 'Nord'),
+    (2, 'Sud'),
     (3, 'Est');
 
 INSERT INTO Ville (id_Ville, id_Region, nom_Ville) VALUES
