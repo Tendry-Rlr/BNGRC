@@ -17,7 +17,7 @@ class BesoinController
 
         $besoin = new BesoinModel(Flight::db());
         $besoin->saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom);
-        Flight::redirect('/');
+        Flight::redirect('/besoinville/'. $id_ville);
     }
 
     public function loadInsert()
