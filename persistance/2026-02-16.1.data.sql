@@ -11,9 +11,9 @@ INSERT INTO Ville (id_Ville, id_Region, nom_Ville) VALUES
     (4, 3, 'Ville D');
 
 INSERT INTO Besoin_Categorie (id_Besoin_Categorie, libelle) VALUES
-    (1, 'Nourriture'),
-    (2, 'Sante'),
-    (3, 'Abri');
+    (1, 'Nature'), 
+    (2, 'Materiaux'), 
+    (3, 'Argent'); 
 
 INSERT INTO Besoin_Fille (id_Besoin_Fille, id_Besoin_Categorie, prix_Unitaire) VALUES
     (1, 1, 5.00),
@@ -21,11 +21,11 @@ INSERT INTO Besoin_Fille (id_Besoin_Fille, id_Besoin_Categorie, prix_Unitaire) V
     (3, 2, 15.00),
     (4, 3, 100.00);
 
-INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite) VALUES
-    (1, 1, 1, 100.0),
-    (2, 2, 2, 200.0),
-    (3, 3, 3, 50.0),
-    (4, 4, 4, 10.0);
+INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite, nom_Besoin) VALUES
+    (1, 1, 1, 100.0, 'Riz'),     -- Nature: riz
+    (2, 2, 2, 200.0, 'Huile'),   -- Nature: huile
+    (3, 3, 3, 50.0, 'Tole'),     -- Materiaux: tôle
+    (4, 4, 4, 10.0, 'Argent');   -- Argent: fonds
 
 INSERT INTO Don (id_Don, id_Besoin, date_Dispatch) VALUES
     (1, 1, '2026-02-10'),
