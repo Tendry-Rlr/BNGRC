@@ -38,6 +38,9 @@ $router->group('', function (Router $router) use ($app) {
 
     $simulation = new SimulationController();
     $router->get('/simulation', [$simulation, 'getSimulation']);
+    $router->post('/simuler', [$simulation, 'simulation']);
+    $router->post('/valider', [$simulation, 'validation']);
+
     $achat = new AchatController();
     $router->get('/achat/@id', [$achat, 'redirectAchat']);
     $router->post('/insertAchat', [$achat, 'insertAchat']);

@@ -19,12 +19,12 @@ class AchatController
         ]);
     }
 
-    public function insertAchat() {
-        $quantite = Flight::request()->data->quantite;
-        $id_besoin = Flight::request()->data->id_besoin;
-        $id_besoin_categorie = Flight::request()->data->id_besoin_categorie;
+    // public function insertAchat() {
+    //     $quantite = Flight::request()->data->quantite;
+    //     $id_besoin = Flight::request()->data->id_besoin;
+    //     $id_besoin_categorie = Flight::request()->data->id_besoin_categorie;
 
-        $achat = new AchatModel(Flight::db());
-        $achat->saveAchat($id_besoin, $id_besoin_categorie, $quantite);
-    }
+    //     $achat = new AchatModel(Flight::db());
+    //     $achat->saveAchat($id_besoin, $id_besoin_categorie, $quantite);
+    // }
 }
