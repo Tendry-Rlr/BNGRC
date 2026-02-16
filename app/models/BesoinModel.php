@@ -59,4 +59,12 @@ class BesoinModel
             ':nombesoin' => $nom,
         ]);
     }
+
+    public function getBesoinById($id)
+    {
+        $sql = "SELECT * FROM V_Besoin where id_Besoin = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

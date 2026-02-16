@@ -41,3 +41,11 @@ CREATE OR REPLACE TABLE Don(
     date_Dispatch date
 );
 
+create or replace table Achat_Attente(
+    id_Achat_Attente int primary key auto_increment,
+    id_Ville int references Ville(id_Ville),
+    id_Besoin int REFERENCES Besoin(id_Besoin),
+    quantite DOUBLE, 
+    date_dispatch date,
+    prix double
+);

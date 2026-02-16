@@ -9,6 +9,7 @@ use app\controllers\DonController;
 use app\controllers\VilleController;
 use app\controllers\BesoinController;
 use app\controllers\SimulationController;
+use app\controllers\AchatController;
 
 
 /** 
@@ -37,5 +38,8 @@ $router->group('', function (Router $router) use ($app) {
 
     $simulation = new SimulationController();
     $router->get('/simulation', [$simulation, 'getSimulation']);
+    $achat = new AchatController();
+    $router->get('/achat/@id', [$achat, 'redirectAchat']);
+    $router->post('/insertAchat', [$achat, 'insertAchat']);
 
 }, [SecurityHeadersMiddleware::class]);
