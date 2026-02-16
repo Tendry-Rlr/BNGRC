@@ -9,52 +9,117 @@ $baseUrl = $baseUrl ?? '';
     <div class="card-body">
       <h5 class="card-title mb-4">Faire un don</h5>
 
-      <form method="post" action="" class="row g-3 align-items-center">
-        <div class="col-auto flex-grow-1">
-          <label for="dons-select" class="visually-hidden">Dons</label>
+      <?php
+        // build categories list: prefer $listeCategorie if provided, otherwise extract from $listeBesoin
+        $categories = [];
+        if (!empty($listeCategorie)) {
+          foreach ($listeCategorie as $c) {
+            $cid = $c['id_Besoin_Categorie'] ?? $c['id'] ?? null;
+            $cl = $c['libelle'] ?? $c['categorie_libelle'] ?? $c['nom'] ?? '';
+            if ($cid !== null) $categories[$cid] = $cl;
+          }
+        } else {
+          foreach (($listeBesoin ?? []) as $b) {
+            $cid = $b['id_Besoin_Categorie'] ?? $b['id_BesoinCategorie'] ?? null;
+            $cl = $b['categorie_libelle'] ?? $b['libelle'] ?? null;
+            if ($cid !== null && $cl !== null) $categories[$cid] = $cl;
+          }
+        }
+      ?>
+
+      <form method="post" action="<?= $baseUrl ?>/donner" class="row g-3 align-items-center">
+
+        <div class="col-md-5">
+          <label for="dons-select" class="form-label">Produit</label>
           <select class="form-select" name="dons" id="dons-select" required>
-            <option value="">Donnez...</option>
-            <option value="argent">Argent</option>
-            <option value="nourriture">Nourriture</option>
+            <?php foreach ($listeBesoin as $besoin): ?>
+              <option value="<?= $besoin['id_Besoin_Fille'] ?>"><?= htmlspecialchars($besoin['nom_Besoin']) ?></option>
+            <?php endforeach; ?>
           </select>
         </div>
 
-        <div class="col-auto">
-          <button class="btn btn-primary" type="submit">Valider</button>
+        <div class="col-md-2">
+          <label for="quantite" class="form-label">Quantité</label>
+          <input id="quantite" name="quantite" type="number" min="1" value="1" class="form-control" required>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-primary w-100" type="submit">Valider</button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
-<div class="container mb-5" style="max-width:720px;">
-  <h6 class="mt-3 mb-2">Liste des dons</h6>
+<div class="container mb-5" style="max-width:920px;">
+  <h6 class="mt-3 mb-3">Liste des dons</h6>
 
-  <?php if (empty($donList ?? [])): ?>
+  <?php if (empty($listeDon ?? [])): ?>
     <div class="alert alert-secondary" role="alert">Aucun don pour le moment.</div>
   <?php else: ?>
-    <ul class="list-group">
-      <?php foreach ($donList as $don): ?>
-        <?php
-          $label = $don['dons'] ?? $don['type'] ?? null;
-          if (!$label) {
-            // fall back to showing some fields if present
-            $parts = [];
-            foreach (['nom','name','id'] as $k) if (!empty($don[$k])) $parts[] = $don[$k];
-            $label = $parts ? implode(' - ', $parts) : 'Don';
-          }
-        ?>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div>
-            <div class="fw-semibold"><?= htmlspecialchars($label) ?></div>
-            <?php if (!empty($don['info'])): ?><div class="text-muted small"><?= htmlspecialchars($don['info']) ?></div><?php endif; ?>
-          </div>
-          <?php if (!empty($don['created_at'])): ?><small class="text-muted"><?= htmlspecialchars($don['created_at']) ?></small><?php endif; ?>
-        </li>
-      <?php endforeach; ?>
-    </ul>
+    <div class="table-responsive">
+      <table id="don-table" class="table table-bordered table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Villes</th>
+            <th>Régions</th>
+            <th>Nom du produit</th>
+            <th>Quantité</th>
+            <th>Date du don</th>
+          </tr>
+        </thead>
+        <tbody>
+                <?php foreach ($listeDon as $don){
+                    $ville = $don['nom_Ville'] ?? $don['nomVille'] ?? $don['ville'] ?? '-';
+                    $region = $don['nom_Region'] ?? $don['nomRegion'] ?? $don['region'] ?? '-';
+                    $produit = $don['nom_produit'] ?? $don['nom_Besoin'] ?? $don['nom'] ?? $don['nom_Don'] ?? '-';
+                    $quantite = $don['quantite_don'] ?? $don['quantite'] ?? '-';
+                    $date = $don['date_dispatch'] ?? $don['date_Dispatch'] ?? $don['created_at'] ?? $don['date'] ?? '-';
+                    $catId = $don['id_Besoin_Categorie'] ?? $don['id_BesoinCategorie'] ?? $don['categorie_id'] ?? $don['id_categorie'] ?? '';
+                ?>
+            <tr data-cat="<?= htmlspecialchars($catId) ?>">
+              <td><?= htmlspecialchars($ville) ?></td>
+              <td><?= htmlspecialchars($region) ?></td>
+              <td><?= htmlspecialchars($produit) ?></td>
+              <td><?= htmlspecialchars($quantite) ?></td>
+              <td><?= htmlspecialchars($date) ?></td>
+            </tr>
+                <?php } ?>
+        </tbody>
+      </table>
+    </div>
+    <div id="noResults" class="alert alert-warning mt-3 d-none">Aucun don pour cette catégorie.</div>
   <?php endif; ?>
 </div>
+
+<script>
+  (function(){
+    var catSelect = document.getElementById('categorie-select');
+    var table = document.getElementById('don-table');
+    var noResults = document.getElementById('noResults');
+    if(!catSelect || !table) return;
+    var rows = Array.from(table.querySelectorAll('tbody tr'));
+
+    function filterRows(){
+      var val = catSelect.value;
+      var visible = 0;
+      rows.forEach(function(r){
+        var rc = r.getAttribute('data-cat') || '';
+        if(val === '' || String(rc) === String(val)){
+          r.style.display = '';
+          visible++;
+        } else {
+          r.style.display = 'none';
+        }
+      });
+      if(noResults) noResults.classList.toggle('d-none', visible > 0);
+    }
+
+    catSelect.addEventListener('change', filterRows);
+    // initial filter on load
+    filterRows();
+  })();
+</script>
 
 <?php
 $content = ob_get_clean();

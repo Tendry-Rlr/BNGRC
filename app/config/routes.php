@@ -5,6 +5,7 @@ use flight\Engine;
 use flight\net\Router;
 
 use app\controllers\RegionController;
+use app\controllers\DonController;
 
 
 /** 
@@ -18,4 +19,8 @@ $router->group('', function (Router $router) use ($app) {
     $region = new RegionController();
     $router->get('/', [$region, 'listeRegion']);
 
+    $don = new DonController();
+    $router->get('/don', [$don, 'listeDon']);
+    $router->post('/donner', [$don, 'donner']);
+    
 }, [SecurityHeadersMiddleware::class]);

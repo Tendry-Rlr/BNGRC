@@ -4,7 +4,7 @@ $page_title = 'BNGRC - Don';
 $baseUrl = $baseUrl ?? '';
 ?>
 
-<a href=""></a>
+<a href="<?= $baseUrl ?>/don">Faire un don</a>
 
 <form action="">
     
