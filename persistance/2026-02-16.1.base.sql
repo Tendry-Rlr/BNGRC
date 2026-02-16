@@ -49,6 +49,3 @@ create or replace table Achat_Attente(
     date_dispatch date,
     prix double
 );
-
-
-select * from Achat_Attente;

@@ -45,6 +45,8 @@ $router->group('', function (Router $router) use ($app) {
     $achat = new AchatController();
     $router->get('/achat/@id/', [$achat, 'redirectAchat']);
     $router->post('/insertAchat', [$achat, 'insertAchat']);
+    $router->get('/listeAchat', [$achat, 'listeAchat']);
+    $router->post('/filtreAchat', [$achat, 'filtrerAchat']);
 
     $recapitulation = new RecapitulationController();
     $router->get('/recapitulation', [$recapitulation, 'recapitulation']);
