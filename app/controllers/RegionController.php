@@ -9,7 +9,7 @@ class RegionController
 {
     public function listeRegion()
     {
-        $region = new RegionModel();
+        $region = new RegionModel(Flight::db());
         $liste = $region->getAllRegion();
         Flight::render('index', [
             'listeRegion' => $liste,
