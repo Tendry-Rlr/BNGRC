@@ -9,5 +9,6 @@ CREATE OR REPLACE TABLE Achat(
     id_Besoin int references Besoin(id_Besoin),
     id_Don int references Don(id_Don),
     quantite double,
-    montant double
+    montant double,
+    date date
 );

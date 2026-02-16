@@ -19,6 +19,14 @@ class AchatController
         ]);
     }
 
+    // public function insertAchat() {
+    //     $quantite = Flight::request()->data->quantite;
+    //     $id_besoin = Flight::request()->data->id_besoin;
+    //     $id_besoin_categorie = Flight::request()->data->id_besoin_categorie;
+
+    //     $achat = new AchatModel(Flight::db());
+    //     $achat->saveAchat($id_besoin, $id_besoin_categorie, $quantite);
+    // }
     public function insertAchat()
     {
         $quantite = Flight::request()->data->quantite;
@@ -30,11 +38,45 @@ class AchatController
 
         $achat = new AchatModel(Flight::db());
         $result = $achat->saveAchat($id_besoin, $id_besoin_categorie, $id_ville, $quantite, $pU, $quantite_besoin);
-        
+
         if ($result['success']) {
-            Flight::redirect("/besoinville/".$id_ville."?success=" . urlencode($result['message']));
+            Flight::redirect("/besoinville/" . $id_ville . "?success=" . urlencode($result['message']));
         } else {
-            Flight::redirect("/achat/".$id_besoin."?error=" . urlencode($result['error']));
+            Flight::redirect("/achat/" . $id_besoin . "?error=" . urlencode($result['error']));
         }
+    }
+
+    public function listeAchat()
+    {
+        $achat = new AchatModel(Flight::db());
+        $listeAchat = $achat->getAllAchatDetails();
+
+        $ville = new VilleModel(Flight::db());
+        $listeVille = $ville->getAllVille();
+
+        Flight::render('achat-filtre', [
+            'achats' => $listeAchat,
+            'villes' => $listeVille,
+            'baseUrl' => Flight::get('flight.base_url'),
+        ]);
+    }
+
+    public function filtrerAchat()
+    {
+        $idville = Flight::request()->data->id_ville;
+        $achat = new AchatModel(Flight::db());
+        if (empty($idville)) {
+            $listeAchat = $achat->getAllAchatDetails();
+        } else {
+            $listeAchat = $achat->getAchatByVille($idville);
+        }
+        $ville = new VilleModel(Flight::db());
+        $listeVille = $ville->getAllVille();
+
+        Flight::render('achat-filtre', [
+            'achats' => $listeAchat,
+            'villes' => $listeVille,
+            'baseUrl' => Flight::get('flight.base_url'),
+        ]);
     }
 }

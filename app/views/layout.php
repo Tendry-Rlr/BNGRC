@@ -228,6 +228,11 @@ $isAdmin = !empty($isAdminUser ?? false);
         <span>Ajouter un besoin</span>
       </a>
 
+      <a href="<?= $baseUrl ?>/listeAchat" class="sidebar-menu-item">
+        <i class="bi bi-currency-dollar"></i>
+        <span>Filtre de la liste d'achat</span>
+      </a>
+
       <a href="<?= $baseUrl ?>/simulation" class="sidebar-menu-item">
         <i class="bi bi-currency-dollar"></i>
         <span>Simulation d'achat</span>
@@ -253,7 +258,7 @@ $isAdmin = !empty($isAdminUser ?? false);
       <div>
         <?php if ($isLoggedIn): ?>
           <span class="text-muted">
-            <i class="bi bi-person-circle"></i> 
+            <i class="bi bi-person-circle"></i>
             <?= htmlspecialchars($currentUser['nom'] ?? 'Utilisateur') ?>
           </span>
         <?php endif; ?>
@@ -269,20 +274,21 @@ $isAdmin = !empty($isAdminUser ?? false);
     </footer>
   </div>
 
-  <script src="<?= $assetBase ?>/assets/bootstrap/js/bootstrap.bundle.min.js" nonce="<?= Flight::get('csp_nonce') ?>"></script>
+  <script src="<?= $assetBase ?>/assets/bootstrap/js/bootstrap.bundle.min.js"
+    nonce="<?= Flight::get('csp_nonce') ?>"></script>
   <script nonce="<?= Flight::get('csp_nonce') ?>">
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('show');
     }
 
     // Highlight active menu item based on current URL
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const currentPath = window.location.pathname;
       const menuItems = document.querySelectorAll('.sidebar-menu-item');
-      
+
       menuItems.forEach(item => {
-        if (item.getAttribute('href') === currentPath || 
-            (currentPath.includes(item.getAttribute('href')) && item.getAttribute('href') !== '<?= $baseUrl ?>/')) {
+        if (item.getAttribute('href') === currentPath ||
+          (currentPath.includes(item.getAttribute('href')) && item.getAttribute('href') !== '<?= $baseUrl ?>/')) {
           item.classList.add('active');
         }
       });
