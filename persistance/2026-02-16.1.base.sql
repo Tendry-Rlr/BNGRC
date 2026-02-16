@@ -15,7 +15,7 @@ CREATE OR REPLACE TABLE Ville(
 );
 
 CREATE OR REPLACE TABLE Besoin_Categorie(
-    id_Besoin_Categorie int primary key auto_increment,
+    id_Besoin_Categorie int primary key auto_increment,z
     libelle varchar(50)
 );
 
@@ -35,6 +35,7 @@ CREATE OR REPLACE TABLE Besoin(
 
 CREATE OR REPLACE TABLE Don(
     id_Don int primary key auto_increment,
+    id_Ville int references Ville(id_Ville),
     id_Besoin_Fille int references Besoin_Fille(id_Besoin_Fille),
     quantite double,
     date_Dispatch date
