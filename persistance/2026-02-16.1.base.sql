@@ -22,7 +22,7 @@ CREATE OR REPLACE TABLE Besoin_Categorie(
 CREATE OR REPLACE TABLE Besoin_Fille(
     id_Besoin_Fille int primary key auto_increment,
     id_Besoin_Categorie int references Besoin_Categorie(id_Besoin_Categorie),
-    prix_Unitaire double,
+    prix_Unitaire double
 );
 
 CREATE OR REPLACE TABLE Besoin(

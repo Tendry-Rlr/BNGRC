@@ -11,8 +11,8 @@ INSERT INTO Ville (id_Ville, id_Region, nom_Ville) VALUES
     (4, 3, 'Ville D');
 
 INSERT INTO Besoin_Categorie (id_Besoin_Categorie, libelle) VALUES
-    (1, 'Nature'), --en besoin : riz, huuile ...
-    (2, 'Materiaux'), --en besoin : tole, clou
+    (1, 'Nature'), 
+    (2, 'Materiaux'), 
     (3, 'Argent'); 
 
 INSERT INTO Besoin_Fille (id_Besoin_Fille, id_Besoin_Categorie, prix_Unitaire) VALUES
