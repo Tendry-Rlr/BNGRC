@@ -33,6 +33,7 @@ $baseUrl = $baseUrl ?? '';
                 <th><i class="bi bi-box"></i> Besoin</th>
                 <th><i class="bi bi-currency-dollar"></i> Prix unitaire</th>
                 <th><i class="bi bi-hash"></i> Quantité</th>
+                <th><i class="bi bi-cart"></i> Achat </th>
               </tr>
             </thead>
             <tbody>
@@ -42,6 +43,11 @@ $baseUrl = $baseUrl ?? '';
                 <td><strong><?= htmlspecialchars($l['nom_Besoin']) ?></strong></td>
                 <td><?= number_format($l['prix_Unitaire'], 2) ?> Ar</td>
                 <td><span class="badge bg-info"><?= htmlspecialchars($l['quantite']) ?></span></td>
+                <?php if($l['nom_Besoin'] != "Argent"){ ?>
+                  <form action="">
+                    <td><a href="<?= $baseUrl ?>/achat/<?= $l['id_Besoin'] ?>" class="btn btn-success">Acheter</a></td>
+                  </form>
+                <?php } ?>
               </tr>
               <?php } ?>
             </tbody>
