@@ -63,3 +63,5 @@ LEFT JOIN (
     GROUP BY id_Besoin
 ) aa ON aa.id_Besoin = b.id_Besoin;
 
+select * from V_DonParVille;
+select * from V_Besoin;

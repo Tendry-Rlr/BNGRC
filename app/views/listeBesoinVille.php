@@ -2,6 +2,7 @@
 ob_start();
 $page_title = 'BNGRC - Liste des besoins par ville';
 $baseUrl = $baseUrl ?? '';
+$success = $_GET['success'] ?? '';
 ?>
 
 <div class="row">
@@ -16,6 +17,14 @@ $baseUrl = $baseUrl ?? '';
     </div>
   </div>
 </div>
+
+<?php if (!empty($success)): ?>
+  <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div><?= htmlspecialchars($success) ?></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<?php endif; ?>
 
 
 <p class="lead">

@@ -10,6 +10,7 @@ use app\controllers\VilleController;
 use app\controllers\BesoinController;
 use app\controllers\SimulationController;
 use app\controllers\AchatController;
+use app\controllers\RecapitulationController;
 
 
 /** 
@@ -42,7 +43,10 @@ $router->group('', function (Router $router) use ($app) {
     $router->post('/valider', [$simulation, 'validation']);
 
     $achat = new AchatController();
-    $router->get('/achat/@id', [$achat, 'redirectAchat']);
+    $router->get('/achat/@id/', [$achat, 'redirectAchat']);
     $router->post('/insertAchat', [$achat, 'insertAchat']);
+
+    $recapitulation = new RecapitulationController();
+    $router->get('/recapitulation', [$recapitulation, 'recapitulation']);
 
 }, [SecurityHeadersMiddleware::class]);
