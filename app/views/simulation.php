@@ -30,8 +30,8 @@ $baseUrl = $baseUrl ?? '';
                                 </option>
                             <?php } ?>
                         </select>
-                        <button type="submit" formaction="<?= $baseUrl ?>/simuler" class="btn btn-warning">Simuler</button>
-                        <button type="submit" formaction="<?= $baseUrl ?>/valider" class="btn btn-success">Valider</button>
+                        <button type="submit" formaction="<?= $baseUrl ?>/simuler" class="btn btn-warning"><i class="bi bi-activity"></i>Simuler</button>
+                        <button type="submit" formaction="<?= $baseUrl ?>/valider" class="btn btn-success"><i class="bi bi-currency-dollar"></i>Valider</button>
                     </form>
 
                 </div>
