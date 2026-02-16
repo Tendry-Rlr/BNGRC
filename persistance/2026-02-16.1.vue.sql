@@ -32,3 +32,5 @@ LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
 LEFT JOIN Region r ON v.id_Region = r.id_Region
 ORDER BY d.date_Dispatch DESC;
 
+select * from V_DonParVille;
+select * from V_Besoin;

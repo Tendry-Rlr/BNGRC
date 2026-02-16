@@ -59,7 +59,7 @@ class BesoinModel
             ':nombesoin' => $nom,
         ]);
     }
-
+    
     public function getBesoinById($id)
     {
         $sql = "SELECT * FROM V_Besoin where id_Besoin = :id";
@@ -67,4 +67,5 @@ class BesoinModel
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 }
