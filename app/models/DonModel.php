@@ -42,4 +42,11 @@ class DonModel
             ':quantite' => $quantite
         ]);
     }
+    public function getDonByVille($idVille){
+        $sql = " SELECT * FROM V_DonParVille WHERE id_Ville = :id ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $idVille]);
+        $liste =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $liste;
+    }
 }
