@@ -36,6 +36,7 @@ $isAdmin = !empty($isAdminUser ?? false);
           <?php else: ?>
             <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>">Connexion</a></li>
             <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/register">Inscription</a></li>
+            <li class="nav-item"><a class="nav-link" href="<?= $baseUrl ?>/addbesoin">Ajouter besoin</a></li>
           <?php endif; ?>
         </ul>
       </div>
@@ -47,7 +48,7 @@ $isAdmin = !empty($isAdminUser ?? false);
   </main>
 
   <footer class="bg-light text-center py-3">
-    <small class="text-muted">© <?= date('Y') ?> BNGRC</small>
+    <small class="text-muted">© <?= date('Y') ?> ETU004029 - ETU004176 - ETU004344 </small>
   </footer>
 
   <script src="<?= $assetBase ?>/assets/bootstrap/js/bootstrap.bundle.min.js" nonce="<?= Flight::get('csp_nonce') ?>"></script>

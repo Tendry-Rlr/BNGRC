@@ -6,6 +6,8 @@ use flight\net\Router;
 
 use app\controllers\RegionController;
 use app\controllers\DonController;
+use app\controllers\VilleController;
+use app\controllers\BesoinController;
 
 
 /** 
@@ -23,4 +25,13 @@ $router->group('', function (Router $router) use ($app) {
     $router->get('/don', [$don, 'listeDon']);
     $router->post('/donner', [$don, 'donner']);
     
+    $ville = new VilleController();
+    $router->get('/ville/@id' , [$ville, 'listeVilleByRegion']);
+    $router->get('/besoinville/@id', [$ville , 'listeBesoinByVille']);
+
+    $besoin = new BesoinController();
+    $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
+    $router->get('/addbesoin', [$besoin, 'loadInsert']);
+    $router->post('/insertBesoin', [$besoin, 'insertBesoin']);
+
 }, [SecurityHeadersMiddleware::class]);
