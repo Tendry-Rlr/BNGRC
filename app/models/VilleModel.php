@@ -21,4 +21,11 @@ class VilleModel
         $stmt->execute([':id' => $id_ville]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getVilleById($id_ville){
+        $sql = "SELECT * FROM Ville where id_Ville= :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id_ville]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

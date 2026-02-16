@@ -18,11 +18,14 @@ class VilleController
         ]);
     }
     public function listeBesoinByVille($idVille){
+        $ville = new VilleModel(Flight::db());
         $besoin = new BesoinModel(Flight::db());
+        $details = $ville->getVilleById($idVille);
         $liste = $besoin->getBesoinByVille($idVille);
             Flight::render('listeBesoinVille', [
             'listeBesoin' => $liste,
             'baseUrl' => Flight::get('flight.base_url'),
+            'details' => $details
         ]);
     }
 }

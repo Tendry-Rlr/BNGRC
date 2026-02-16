@@ -4,7 +4,7 @@ $page_title = 'BNGRC - Liste des besoins par ville';
 $baseUrl = $baseUrl ?? '';
 ?>
 
-
+<p>Liste des besoins de la ville <em><?= $details[0]['nom_Ville'] ?></em></p>
 <table class="table table-striped">
   <tr>
     <th>Categorie</th>
