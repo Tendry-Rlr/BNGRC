@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\VilleModel;
+use app\models\BesoinModel;
 use Flight;
 
 class VilleController
@@ -17,7 +18,11 @@ class VilleController
         ]);
     }
     public function listeBesoinByVille($idVille){
-        $ville = new VilleModel(Flight::db());
-        
+        $besoin = new BesoinModel(Flight::db());
+        $liste = $besoin->getBesoinByVille($idVille);
+            Flight::render('listeBesoinVille', [
+            'listeBesoin' => $liste,
+            'baseUrl' => Flight::get('flight.base_url'),
+        ]);
     }
 }
