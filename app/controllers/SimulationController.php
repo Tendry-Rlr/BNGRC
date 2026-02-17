@@ -65,7 +65,12 @@ class SimulationController
 
         $id = Flight::request()->data->attente;
 
-        $simulationModel->annuler($id);
+        $achatModel = new AchatModel(Flight::db());
+        $attente = $achatModel->getAchatByAttente($id);
+
+        if ($attente) {
+            $simulationModel->annuler($attente, $id);
+        }
 
         Flight::redirect('/simulation');
     }
