@@ -25,4 +25,21 @@ class RecapitulationController
         'achatSumTotaux'=>$achatSumTotaux
         ]);
     }
+
+    public function recapitulationApi(){
+        $besoin = new BesoinModel(Flight::db());
+        $besoinRestant = $besoin->getBesoinRestant();
+        $besoinSumRestant = $besoin->getSumBesoinRestant();
+
+        $achat = new AchatModel(Flight::db());
+        $achatTotaux = $achat->getAchatTotaux();
+        $achatSumTotaux = $achat->getSumAchatTotaux();
+
+        Flight::json([
+            'besoinRestant' => $besoinRestant,
+            'besoinSumRestant' => $besoinSumRestant,
+            'achatTotaux' => $achatTotaux,
+            'achatSumTotaux' => $achatSumTotaux
+        ]);
+    }
 }

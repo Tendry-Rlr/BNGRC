@@ -52,6 +52,7 @@ $router->group('', function (Router $router) use ($app) {
 
     $recapitulation = new RecapitulationController();
     $router->get('/recapitulation', [$recapitulation, 'recapitulation']);
+    $router->get('/api/recapitulation', [$recapitulation, 'recapitulationApi']);
 
     $router->post('/donProp', [$don, 'proportionnelle']);
 

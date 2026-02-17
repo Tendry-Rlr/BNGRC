@@ -99,8 +99,7 @@ class BesoinModel
         $stmt->execute([':qte' => $quantite, ':id' => $id]);
     }
 
-    // Diminue la quantité d'un besoin spécifique (par id_Besoin exact)
-    public function updateBesoinById($idBesoin, $quantite){
+    public function updateBesoinByIdProportionnel($idBesoin, $quantite){
         $sql = "UPDATE Besoin SET quantite = quantite - :qte WHERE id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':qte' => $quantite, ':id' => $idBesoin]);

@@ -109,6 +109,12 @@ $baseUrl = $baseUrl ?? '';
     const xhr = new XMLHttpRequest();
     xhr.open('GET', BASE_URL + '/api/recapitulation', true);
     xhr.setRequestHeader('Accept', 'application/json');
+    
+    xhr.onerror = function() {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Actualiser';
+      alert('Erreur réseau lors de l\'actualisation.');
+    };
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
@@ -118,11 +124,11 @@ $baseUrl = $baseUrl ?? '';
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
 
-          // Mettre à jour les montants
-          document.getElementById('besoin-sum-restant').textContent = data.besoinSumRestant.sum + ' Ar';
-          document.getElementById('achat-sum-totaux').textContent = data.achatSumTotaux[0].sum + ' Ar';
+          document.getElementById('besoin-sum-restant').textContent = 
+            (data.besoinSumRestant && data.besoinSumRestant.sum ? data.besoinSumRestant.sum : 0) + ' Ar';
+          document.getElementById('achat-sum-totaux').textContent = 
+            (data.achatSumTotaux && data.achatSumTotaux[0] && data.achatSumTotaux[0].sum ? data.achatSumTotaux[0].sum : 0) + ' Ar';
 
-          // Mettre à jour le tableau besoins restants
           const tbodyBesoin = document.getElementById('tbody-besoin-restant');
           tbodyBesoin.innerHTML = '';
           data.besoinRestant.forEach(function (l) {
