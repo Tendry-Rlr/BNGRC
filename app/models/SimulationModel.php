@@ -39,19 +39,25 @@ class SimulationModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function valider($qte, $id){
-    
-        $sql= "update Besoin set quantite = quantite - :qte where id_Besoin = :id";
+    public function valider($attente, $idAttente){
+        $idBesoin = $attente['id_Besoin'];
+        $qte      = $attente['quantite'];
+        $prix     = $attente['prix'] ?? 0;
+
+        // 1. Diminuer la quantité du besoin
+        $sql = "UPDATE Besoin SET quantite = quantite - :qte WHERE id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['qte' => $qte, 'id' => $id]);
+        $stmt->execute(['qte' => $qte, 'id' => $idBesoin]);
 
-        $req= "insert into Achat (id_Besoin, quantite, date) values (:id, :qte, NOW())";
+        // 2. Insérer l'achat avec le montant
+        $req = "INSERT INTO Achat (id_Besoin, quantite, montant, date) VALUES (:id, :qte, :montant, NOW())";
         $stm = $this->db->prepare($req);
-        $stm->execute(['id' => $id, 'qte' => $qte]);
+        $stm->execute(['id' => $idBesoin, 'qte' => $qte, 'montant' => $prix]);
 
-        $del= "delete from Achat_Attente where id_Achat_Attente = :id";
+        // 3. Supprimer l'attente
+        $del = "DELETE FROM Achat_Attente WHERE id_Achat_Attente = :id";
         $st = $this->db->prepare($del);
-        $st->execute(['id' => $id]);
+        $st->execute(['id' => $idAttente]);
     }
 
     public function annuler($id){

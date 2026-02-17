@@ -44,7 +44,7 @@ $achats = $achats ?? [];
     <div class="col-12">
         <div class="card card-modern">
             <div class="card-body">
-                <h5 class="card-title mb-3"><i class="bi bi-list-ul text-primary"></i> Liste des dons</h5>
+                <h5 class="card-title mb-3"><i class="bi bi-list-ul text-primary"></i> Liste des achats validés</h5>
                 <div class="table-responsive">
                     <table id="don-table" class="table table-hover align-middle">
                         <thead class="table-light">
@@ -52,31 +52,36 @@ $achats = $achats ?? [];
                                 <th>Ville</th>
                                 <th>Région</th>
                                 <th>Produit</th>
-                                <th>Montant</th>
                                 <th>Quantité</th>
+                                <th>Montant</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($achats as $don):
-                                $ville = htmlspecialchars($don['nom_Ville'] ?? $don['ville'] ?? '-');
-                                $region = htmlspecialchars($don['nom_Region'] ?? $don['region'] ?? '-');
-                                $produit = htmlspecialchars($don['nom_Besoin'] ?? $don['nom_produit'] ?? '-');
-                                $montant = $don['montant'] ?? $don['prix'] ?? null;
-                                $montant = is_null($montant) ? '-' : number_format((float) $montant, 2) . ' Ar';
-                                $quantite = htmlspecialchars($don['quantite'] ?? $don['quantite_don'] ?? '-');
-                                $date = htmlspecialchars($don['date_dispatch'] ?? $don['date'] ?? '-');
-                                $idVille = htmlspecialchars($don['id_Ville'] ?? $don['ville_id'] ?? $don['id_Ville'] ?? '');
+                            <?php if (empty($achats)): ?>
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Aucun achat validé.</td>
+                                </tr>
+                            <?php else: ?>
+                            <?php foreach ($achats as $achat):
+                                $ville = htmlspecialchars($achat['nom_Ville'] ?? '-');
+                                $region = htmlspecialchars($achat['nom_Region'] ?? '-');
+                                $produit = htmlspecialchars($achat['nom_Besoin'] ?? '-');
+                                $quantite = htmlspecialchars($achat['quantite'] ?? '-');
+                                $montant = isset($achat['montant']) ? number_format((float) $achat['montant'], 2) . ' Ar' : '-';
+                                $date = htmlspecialchars($achat['date'] ?? '-');
+                                $idVille = htmlspecialchars($achat['id_Ville'] ?? '');
                                 ?>
                                 <tr data-ville="<?= $idVille ?>">
                                     <td><?= $ville ?></td>
                                     <td><?= $region ?></td>
                                     <td><?= $produit ?></td>
-                                    <td><?= $montant ?></td>
                                     <td><?= $quantite ?></td>
+                                    <td><?= $montant ?></td>
                                     <td><?= $date ?></td>
                                 </tr>
                             <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

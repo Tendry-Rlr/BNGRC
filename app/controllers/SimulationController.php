@@ -27,7 +27,7 @@ class SimulationController
         $achatModel = new AchatModel(Flight::db());
         $attente = $achatModel->getAchatByAttente($id);
 
-        $liste = $simulationModel->simuler($attente['quantite'], $id);
+        $liste = $simulationModel->simuler($attente['quantite'], $attente['id_Besoin']);
 
         $achatAttente = $simulationModel->getAllAchatAttente();
 
@@ -46,7 +46,12 @@ class SimulationController
         $achatModel = new AchatModel(Flight::db());
         $attente = $achatModel->getAchatByAttente($id);
 
-        $simulationModel->valider($attente['id_Besoin'], $id);
+        if (!$attente) {
+            Flight::redirect('/simulation');
+            return;
+        }
+
+        $simulationModel->valider($attente, $id);
         $achatAttente = $simulationModel->getAllAchatAttente();
 
         Flight::render('simulation', [
