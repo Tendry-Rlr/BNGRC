@@ -11,6 +11,7 @@ use app\controllers\BesoinController;
 use app\controllers\SimulationController;
 use app\controllers\AchatController;
 use app\controllers\RecapitulationController;
+use app\controllers\ReinitController;
 
 
 /**     
@@ -50,5 +51,10 @@ $router->group('', function (Router $router) use ($app) {
 
     $recapitulation = new RecapitulationController();
     $router->get('/recapitulation', [$recapitulation, 'recapitulation']);
+
+    $router->post('/donProp', [$don, 'proportionnelle']);
+
+    $reinit = new ReinitController();
+    $router->get('/reinitialize', [$reinit, 'reinit']);
 
 }, [SecurityHeadersMiddleware::class]);

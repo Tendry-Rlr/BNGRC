@@ -243,6 +243,12 @@ $isAdmin = !empty($isAdminUser ?? false);
         <span>Recapitulation</span>
       </a>
 
+      <a href="<?= $baseUrl ?>/reinitialize" class="sidebar-menu-item">
+      <button class="btn btn-primary btn-lg w-100">
+          Reinitialiser
+      </button>
+      </a>
+
       <div class="sidebar-divider"></div>
 
     </nav>
