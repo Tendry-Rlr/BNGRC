@@ -213,6 +213,10 @@ $isAdmin = !empty($isAdminUser ?? false);
         <i class="bi bi-house-door"></i>
         <span>Accueil</span>
       </a>
+      <a href="<?= $baseUrl ?>/villes" class="sidebar-menu-item">
+        <i class="bi bi-buildings"></i>
+        <span>Villes</span>
+      </a>
 
       <div class="sidebar-divider"></div>
 

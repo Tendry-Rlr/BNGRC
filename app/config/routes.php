@@ -31,6 +31,7 @@ $router->group('', function (Router $router) use ($app) {
     $router->post('/petitDon', [$don, 'petitDons']);
 
     $ville = new VilleController();
+    $router->get('/villes' , [$ville, 'listeVille']);
     $router->get('/ville/@id' , [$ville, 'listeVilleByRegion']);
     $router->get('/besoinville/@id', [$ville , 'listeBesoinByVille']);
 
