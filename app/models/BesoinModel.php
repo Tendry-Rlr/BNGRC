@@ -47,10 +47,19 @@ class BesoinModel
         return $result['id_Besoin_Fille'];
     }
 
+    public function getBesoinByNom($nombesoin)
+    {
+        $sql = "select 1 from Besoin where nom_Besoin = :nom";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':nom' => $nombesoin]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom)
     {
         $sql = "insert into Besoin(id_Ville, id_Besoin_Fille, quantite, nom_Besoin)
                 values (:idville, :idbesoinfille, :qtte, :nombesoin)";
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             ':idville' => $id_ville,

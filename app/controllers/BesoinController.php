@@ -17,7 +17,10 @@ class BesoinController
         $nom = Flight::request()->data->nomBesoin;
 
         $besoin = new BesoinModel(Flight::db());
-        $besoin->saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom);
+        $nomBesoin = $besoin->getBesoinByNom($nom);
+        if ($nomBesoin == NULL) {
+            $besoin->saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom);
+        }
         Flight::redirect('/besoinville/' . $id_ville);
     }
 
