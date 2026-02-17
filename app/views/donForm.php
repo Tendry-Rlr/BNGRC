@@ -7,7 +7,7 @@ $baseUrl = $baseUrl ?? '';
 <div class="row justify-content-center mb-4">
   <div class="col-lg-10 col-xl-8">
     <div class="card card-modern">
-      <div class="card-body">
+      <div class="card-body p-5">
         <h4 class="card-title mb-3">
           <i class="bi bi-gift-fill text-primary"></i> Faire un don
         </h4>
@@ -56,19 +56,19 @@ $baseUrl = $baseUrl ?? '';
                 required>
             </div>
 
-            <div class="row">
-              <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/besoinproche" type="submit">
+            <div class="row mt-5 justify-content-center">
+              <div class="col-md-3 d-flex">
+                <button class="btn btn-primary btn-lg w-100 h-100" formaction="<?= $baseUrl ?>/besoinproche" type="submit">
                   Mode le plus proche
                 </button>
               </div>
-              <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/petiDon" type="submit">
+              <div class="col-md-3 d-flex">
+                <button class="btn btn-primary btn-lg w-100 h-100" formaction="<?= $baseUrl ?>/petiDon" type="submit">
                   Mode croissant
                 </button>
               </div>
-              <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/donProp" type="submit">
+              <div class="col-md-3 d-flex">
+                <button class="btn btn-primary btn-lg w-100 h-100" formaction="<?= $baseUrl ?>/donProp" type="submit">
                   Mode proportionelle
                 </button>
               </div>
