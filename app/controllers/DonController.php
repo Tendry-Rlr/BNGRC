@@ -67,7 +67,8 @@ class DonController
     //     Flight::redirect('/don');
     // } 
 
-    public function petitDons(){
+    public function petitDons()
+    {
         $don = new DonModel(Flight::db());
         $besoin = new BesoinModel(Flight::db());
 
@@ -78,8 +79,8 @@ class DonController
 
         $quantiteRestante = $quantiteDonnee;
 
-        foreach($besoins as $b) {
-            if($quantiteRestante <= 0) {
+        foreach ($besoins as $b) {
+            if ($quantiteRestante <= 0) {
                 break;
             }
 
@@ -100,18 +101,19 @@ class DonController
         Flight::redirect('/don');
     }
 
-    public function proportionnelle(){
+    public function proportionnelle()
+    {
         $don = new DonModel(Flight::db());
         $besoinmodel = new BesoinModel(Flight::db());
 
-        $idBesoinFille = Flight::request()->data->dons; 
+        $idBesoinFille = Flight::request()->data->dons;
         $quantiteDonnee = Flight::request()->data->quantite;
 
         $quantiteDonnee = is_string($quantiteDonnee) ? str_replace(',', '.', $quantiteDonnee) : $quantiteDonnee;
-        if (!is_numeric($quantiteDonnee) || (float)$quantiteDonnee <= 0) {
+        if (!is_numeric($quantiteDonnee) || (float) $quantiteDonnee <= 0) {
             Flight::halt(400, 'Quantité invalide');
         }
-        $quantiteDonnee = (float)$quantiteDonnee;
+        $quantiteDonnee = (float) $quantiteDonnee;
 
         $besoins = $don->getBesoinsByBesoinFille($idBesoinFille);
 
@@ -121,11 +123,11 @@ class DonController
 
         $besoinsFiltres = [];
         $totalDemandes = 0.0;
-        
-        foreach($besoins as $b){
+
+        foreach ($besoins as $b) {
             $qte = is_string($b['quantite']) ? str_replace(',', '.', $b['quantite']) : $b['quantite'];
-            if (is_numeric($qte) && (float)$qte > 0) {
-                $qteFloat = (float)$qte;
+            if (is_numeric($qte) && (float) $qte > 0) {
+                $qteFloat = (float) $qte;
                 $besoinsFiltres[] = [
                     'id_Besoin' => $b['id_Besoin'],
                     'id_Ville' => $b['id_Ville'],
@@ -139,25 +141,7 @@ class DonController
             Flight::halt(400, 'Total des demandes invalide');
         }
 
-        $distributions = [];
-        $totalFloor = 0;
-        
-        foreach($besoinsFiltres as $index => $besoin){
-            $quantiteExacte = ($besoin['quantite'] / $totalDemandes) * $quantiteDonnee;
-            $quantiteFloor = (int)floor($quantiteExacte);
-            $decimal = $quantiteExacte - $quantiteFloor;
-            
-            $distributions[] = [
-                'id_Besoin' => $besoin['id_Besoin'],
-                'id_Ville' => $besoin['id_Ville'],
-                'quantite_exacte' => $quantiteExacte,
-                'quantite_floor' => $quantiteFloor,
-                'decimal' => $decimal,
-                'quantite_finale' => $quantiteFloor
-            ];
-            
-            $totalFloor += $quantiteFloor;
-        }
+        $totalDistribue = 0.0;
 
         $reste = (int)$quantiteDonnee - $totalFloor;
         

@@ -11,17 +11,26 @@ $baseUrl = $baseUrl ?? '';
   </button>
 </div>
 
-<div class="card border-success mb-3" style="max-width: 18rem;">
-  <div class="card-header">Montant besoins restants</div>
-  <div class="card-body text-success">
-    <h5 class="card-title" id="besoin-sum-restant"><?= $besoinSumRestant['sum'] ?> Ar</h5>
+<div class="row g-3 mb-4">
+  <div class="col-sm-6">
+    <div class="card h-100 text-white bg-success">
+      <div class="card-body d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="card-subtitle mb-1">Montant besoins restants</div>
+          <div class="h4 fw-bold" id="besoin-sum-restant"><?= number_format($besoinSumRestant['sum'] ?? 0, 2) ?> Ar</div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-
-<div class="card border-primary mb-3" style="max-width: 18rem;">
-  <div class="card-header">Montant besoins totaux et satisfaits</div>
-  <div class="card-body text-primary">
-    <h5 class="card-title" id="achat-sum-totaux"><?= $achatSumTotaux[0]['sum'] ?> Ar</h5>
+  <div class="col-sm-6">
+    <div class="card h-100 text-white bg-primary">
+      <div class="card-body d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="card-subtitle mb-1">Montant besoins totaux et satisfaits</div>
+          <div class="h4 fw-bold" id="achat-sum-totaux"><?= number_format($achatSumTotaux[0]['sum'] ?? 0, 2) ?> Ar</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
