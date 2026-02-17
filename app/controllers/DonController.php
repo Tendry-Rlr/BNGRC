@@ -134,17 +134,42 @@ class DonController
             Flight::halt(400, 'Total des demandes invalide');
         }
 
-        $totalDistribue = 0.0;
+        $distributions = [];
+        $totalFloor = 0;
         
-        foreach($besoinsFiltres as $besoin){
-            $proportion = $besoin['quantite'] / $totalDemandes;
-            $quantiteCalculee = $proportion * $quantiteDonnee;
-            $quantitePourVille = (int)floor($quantiteCalculee);
+        foreach($besoinsFiltres as $index => $besoin){
+            $quantiteExacte = ($besoin['quantite'] / $totalDemandes) * $quantiteDonnee;
+            $quantiteFloor = (int)floor($quantiteExacte);
+            $decimal = $quantiteExacte - $quantiteFloor;
+            
+            $distributions[] = [
+                'id_Besoin' => $besoin['id_Besoin'],
+                'id_Ville' => $besoin['id_Ville'],
+                'quantite_exacte' => $quantiteExacte,
+                'quantite_floor' => $quantiteFloor,
+                'decimal' => $decimal,
+                'quantite_finale' => $quantiteFloor
+            ];
+            
+            $totalFloor += $quantiteFloor;
+        }
 
-            if ($quantitePourVille > 0) {
-                $don->insertDonProportionnel($besoin['id_Ville'], $idBesoinFille, $quantitePourVille);
-                $besoinmodel->updateBesoinByIdProportionnel($besoin['id_Besoin'], $quantitePourVille);
-                $totalDistribue += $quantitePourVille;
+        $reste = (int)$quantiteDonnee - $totalFloor;
+        
+        if ($reste > 0) {
+            usort($distributions, function($a, $b) {
+                return $b['decimal'] <=> $a['decimal'];
+            });
+            
+            for ($i = 0; $i < $reste && $i < count($distributions); $i++) {
+                $distributions[$i]['quantite_finale']++;
+            }
+        }
+        
+        foreach($distributions as $dist){
+            if ($dist['quantite_finale'] > 0) {
+                $don->insertDonProportionnel($dist['id_Ville'], $idBesoinFille, $dist['quantite_finale']);
+                $besoinmodel->updateBesoinById($dist['id_Besoin'], $dist['quantite_finale']);
             }
         }
 
