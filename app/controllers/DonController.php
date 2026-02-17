@@ -30,6 +30,9 @@ class DonController
 
         $don->insertDon($donne, $quantite);
 
+        $besoin = new BesoinModel(Flight::db());
+        $besoin->updateBesoin($donne, $quantite);
+
         Flight::redirect('/don');
 
     }

@@ -81,4 +81,10 @@ class BesoinModel
         return $stmt->fetch(PDO::FETCH_ASSOC);   
     }
 
+    public function updateBesoin($id, $quantite){
+        $sql = "update Besoin set quantite = quantite - :qte where id_Besoin_Fille = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':qte' => $quantite, ':id' => $id]);
+    }
+
 }
