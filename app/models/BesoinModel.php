@@ -136,9 +136,23 @@ class BesoinModel
 
     public function getSumBesoinSatisfait()
     {
-        $sql = "SELECT COALESCE(SUM(aa.prix), 0) AS sum 
-                FROM Achat_Attente aa 
-                WHERE aa.id_Besoin IN (SELECT id_Besoin FROM Besoin WHERE quantite <= 0)";
+        $sql = "SELECT 
+                    COALESCE((
+                        SELECT SUM(sub.montant) FROM (
+                            SELECT DISTINCT d.id_Don, d.quantite * bf.prix_Unitaire AS montant
+                            FROM Don d
+                            JOIN Besoin b ON d.id_Besoin_Fille = b.id_Besoin_Fille AND d.id_Ville = b.id_Ville
+                            JOIN Besoin_Fille bf ON b.id_Besoin_Fille = bf.id_Besoin_Fille
+                            WHERE b.quantite <= 0
+                        ) sub
+                    ), 0) 
+                    + 
+                    COALESCE((
+                        SELECT SUM(aa.prix) 
+                        FROM Achat_Attente aa 
+                        WHERE aa.id_Besoin IN (SELECT id_Besoin FROM Besoin WHERE quantite <= 0)
+                    ), 0) 
+                AS sum";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);

@@ -116,14 +116,26 @@ class AchatModel
     }
 
     public function getAchatTotaux(){
-        $sql = "select * from Achat  join V_Besoin on Achat.id_Besoin = V_Besoin.id_Besoin where V_Besoin.id_Besoin in (select id_Besoin from V_Besoin where quantite = 0)";
+        $sql = "SELECT a.id_Achat, a.montant, a.quantite, a.date,
+                       v.categorie_libelle, v.nom_Besoin, v.prix_Unitaire
+                FROM Achat a
+                JOIN V_Besoin v ON a.id_Besoin = v.id_Besoin
+                UNION ALL
+                SELECT aa.id_Achat_Attente, aa.prix AS montant, aa.quantite, aa.date_dispatch AS date,
+                       v.categorie_libelle, v.nom_Besoin, v.prix_Unitaire
+                FROM Achat_Attente aa
+                JOIN V_Besoin v ON aa.id_Besoin = v.id_Besoin";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);    
     }
 
     public function getSumAchatTotaux(){
-        $sql = "select COALESCE(sum(montant), 0) as sum from Achat where id_Besoin in (select id_Besoin from Besoin where quantite = 0)";
+        $sql = "SELECT COALESCE(SUM(total), 0) AS sum FROM (
+                    SELECT montant AS total FROM Achat
+                    UNION ALL
+                    SELECT prix AS total FROM Achat_Attente
+                ) t";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  

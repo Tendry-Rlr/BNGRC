@@ -178,9 +178,11 @@ $baseUrl = $baseUrl ?? '';
           const data = JSON.parse(xhr.responseText);
 
           document.getElementById('besoin-sum-restant').textContent = 
-            (data.besoinSumRestant && data.besoinSumRestant.sum ? data.besoinSumRestant.sum : 0) + ' Ar';
+            (data.besoinSumRestant && data.besoinSumRestant.sum ? parseFloat(data.besoinSumRestant.sum).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00') + ' Ar';
+          document.getElementById('besoin-sum-satisfait').textContent = 
+            (data.besoinSumSatisfait && data.besoinSumSatisfait.sum ? parseFloat(data.besoinSumSatisfait.sum).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00') + ' Ar';
           document.getElementById('achat-sum-totaux').textContent = 
-            (data.achatSumTotaux && data.achatSumTotaux[0] && data.achatSumTotaux[0].sum ? data.achatSumTotaux[0].sum : 0) + ' Ar';
+            (data.achatSumTotaux && data.achatSumTotaux[0] && data.achatSumTotaux[0].sum ? parseFloat(data.achatSumTotaux[0].sum).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '0.00') + ' Ar';
 
           const tbodyBesoin = document.getElementById('tbody-besoin-restant');
           tbodyBesoin.innerHTML = '';
@@ -208,6 +210,19 @@ $baseUrl = $baseUrl ?? '';
                 '<td>' + l.montant + '</td>' +
                 '<td>' + l.categorie_libelle + '</td>' +
                 '<td>' + l.nom_Besoin + '</td>' +
+              '</tr>';
+          });
+
+          // Mettre à jour le tableau besoins satisfaits
+          const tbodySatisfait = document.getElementById('tbody-besoin-satisfait');
+          tbodySatisfait.innerHTML = '';
+          (data.besoinSatisfait || []).forEach(function (l) {
+            tbodySatisfait.innerHTML +=
+              '<tr>' +
+                '<td><span class="badge bg-warning">' + escapeHtml(l.categorie_libelle) + '</span></td>' +
+                '<td><strong>' + escapeHtml(l.nom_Besoin) + '</strong></td>' +
+                '<td>' + parseFloat(l.prix_Unitaire).toFixed(2) + ' Ar</td>' +
+                '<td><span class="badge bg-success">Satisfait</span></td>' +
               '</tr>';
           });
 
