@@ -75,37 +75,64 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 -- Donnees de test
 INSERT INTO Region (id_Region, nom_Region) VALUES
-    (1, 'Nord'),
-    (2, 'Sud'),
-    (3, 'Est');
+    (1, 'Atsinanana'),
+    (2, 'Vatovavy-Fitovinany'),
+    (3, 'Atsimo-Atsinanana'),
+    (4, 'Diana'),
+    (5, 'Menabe');
 
 INSERT INTO Ville (id_Ville, id_Region, nom_Ville) VALUES
-    (1, 1, 'Ville A'),
-    (2, 1, 'Ville B'),
-    (3, 2, 'Ville C'),
-    (4, 3, 'Ville D');
+    (1, 1, 'Toamasina'),
+    (2, 2, 'Mananjary'),
+    (3, 3, 'Farafangana'),
+    (4, 4, 'Nosy Be'),
+    (5, 5, 'Morondava');
 
 INSERT INTO Besoin_Categorie (id_Besoin_Categorie, libelle) VALUES
-    (1, 'Nature'), 
-    (2, 'Materiaux'), 
-    (3, 'Argent'); 
+    (1, 'nature'),
+    (2, 'materiel'),
+    (3, 'argent');
 
 INSERT INTO Besoin_Fille (id_Besoin_Fille, id_Besoin_Categorie, prix_Unitaire) VALUES
-    (1, 1, 5.00),
-    (2, 1, 1.00),
-    (3, 2, 15.00),
-    (4, 3, 100.00);
+    (1, 1, 3000),    -- Riz (kg)
+    (2, 1, 1000),    -- Eau (L)
+    (3, 1, 6000),    -- Huile (L)
+    (4, 1, 4000),    -- Haricots
+    (5, 2, 25000),   -- Tôle
+    (6, 2, 15000),   -- Bâche
+    (7, 2, 8000),    -- Clous (kg)
+    (8, 2, 10000),   -- Bois
+    (9, 2, 6750000), -- Groupe
+    (10, 3, 1);      -- Argent
 
+-- Besoins ordonnes par colonne Ordre
 INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite, nom_Besoin) VALUES
-    (1, 1, 1, 100.0, 'Riz'),     -- Nature: riz
-    (2, 2, 2, 200.0, 'Huile'),   -- Nature: huile
-    (3, 3, 3, 50.0, 'Tole'),     -- Materiaux: tôle
-    (4, 4, 4, 10.0, 'Argent');   -- Argent: fonds
-
-INSERT INTO Don (id_Don, id_Besoin_Fille, date_Dispatch, quantite) VALUES
-    (1, 1, '2026-02-10', 200.0),
-    (2, 3, '2026-02-12', 200.0),
-    (3, 4, '2026-02-15', 200.0);
+    (1,  1, 6, 200,      'Bache'),         -- Ordre 1  Toamasina
+    (2,  4, 5, 40,       'Tole'),          -- Ordre 2  Nosy Be
+    (3,  2, 10, 6000000, 'Argent'),        -- Ordre 3  Mananjary
+    (4,  1, 2, 1500,     'Eau (L)'),       -- Ordre 4  Toamasina
+    (5,  4, 1, 300,      'Riz (kg)'),      -- Ordre 5  Nosy Be
+    (6,  2, 5, 80,       'Tole'),          -- Ordre 6  Mananjary
+    (7,  4, 10, 4000000, 'Argent'),        -- Ordre 7  Nosy Be
+    (8,  3, 6, 150,      'Bache'),         -- Ordre 8  Farafangana
+    (9,  2, 1, 500,      'Riz (kg)'),      -- Ordre 9  Mananjary
+    (10, 3, 10, 8000000, 'Argent'),        -- Ordre 10 Farafangana
+    (11, 5, 1, 700,      'Riz (kg)'),      -- Ordre 11 Morondava
+    (12, 1, 10, 12000000,'Argent'),        -- Ordre 12 Toamasina
+    (13, 5, 10, 10000000,'Argent'),        -- Ordre 13 Morondava
+    (14, 3, 2, 1000,     'Eau (L)'),       -- Ordre 14 Farafangana
+    (15, 5, 6, 180,      'Bache'),         -- Ordre 15 Morondava
+    (16, 1, 9, 3,        'Groupe'),        -- Ordre 16 Toamasina
+    (17, 1, 1, 800,      'Riz (kg)'),      -- Ordre 17 Toamasina
+    (18, 4, 4, 200,      'Haricots'),      -- Ordre 18 Nosy Be
+    (19, 2, 7, 60,       'Clous (kg)'),    -- Ordre 19 Mananjary
+    (20, 5, 2, 1200,     'Eau (L)'),       -- Ordre 20 Morondava
+    (21, 3, 1, 600,      'Riz (kg)'),      -- Ordre 21 Farafangana
+    (22, 5, 8, 150,      'Bois'),          -- Ordre 22 Morondava
+    (23, 1, 5, 120,      'Tole'),          -- Ordre 23 Toamasina
+    (24, 4, 7, 30,       'Clous (kg)'),    -- Ordre 24 Nosy Be
+    (25, 2, 3, 120,      'Huile (L)'),     -- Ordre 25 Mananjary
+    (26, 3, 8, 100,      'Bois');          -- Ordre 26 Farafangana
 
 -- Fin des donnees de test
 
@@ -203,27 +230,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 INSERT INTO Achat_Fille (id_Besoin_Categorie, frais_Pourcentage) VALUES
 (1, 2.5),
 (2, 1.75),
-(3, 3.0);
-
-INSERT INTO Achat (id_Besoin, id_Don, quantite, montant) VALUES
-(1, 1, 5, 12.50),
-(2, 2, 10, 24.00),
-(3, 3, 2, 0.00),
-(1, 4, 1, 5.00),
-(2, 5, 7, 16.80);
-
-INSERT INTO Achat_Attente (id_Achat_Attente, id_Ville, id_Besoin, quantite, date_dispatch, prix) VALUES
-    (1, 1, 1, 20.0, '2026-02-11', 50.00),
-    (2, 2, 2, 15.0, '2026-02-13', 22.50),
-    (3, 3, 3, 5.0,  '2026-02-14', 75.00),
-    (4, 4, 4, 2.0,  '2026-02-16', 200.00),
-    (5, 1, 2, 30.0, '2026-02-18', 45.00);
-
-    INSERT INTO Besoin (id_Besoin, id_Ville, id_Besoin_Fille, quantite, nom_Besoin) VALUES
-    (5, 2, 1, 150.0, 'Riz'),     
-    (6, 4, 2, 10.0, 'Huile'),  
-    (7, 1, 3, 20.0, 'Tole'),    
-    (8, 3, 4, 50.0, 'Argent');   
+(3, 3.0);   
         ";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
