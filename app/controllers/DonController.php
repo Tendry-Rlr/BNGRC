@@ -141,9 +141,26 @@ class DonController
             Flight::halt(400, 'Total des demandes invalide');
         }
 
-        $totalDistribue = 0.0;
+        $distributions = [];
+        $totalFloor = 0;
 
-        $reste = (int)$quantiteDonnee - $totalFloor;
+        foreach ($besoinsFiltres as $besoin) {
+            $quantiteExacte = ($besoin['quantite'] / $totalDemandes) * $quantiteDonnee;
+            $quantiteFloor = (int) floor($quantiteExacte);
+            $decimal = $quantiteExacte - $quantiteFloor;
+
+            $distributions[] = [
+                'id_Besoin' => $besoin['id_Besoin'],
+                'id_Ville' => $besoin['id_Ville'],
+                'quantite_floor' => $quantiteFloor,
+                'decimal' => $decimal,
+                'quantite_finale' => $quantiteFloor
+            ];
+
+            $totalFloor += $quantiteFloor;
+        }
+
+        $reste = (int) $quantiteDonnee - $totalFloor;
         
         if ($reste > 0) {
             usort($distributions, function($a, $b) {
