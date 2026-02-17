@@ -59,8 +59,11 @@ class BesoinController
 
             $quantiteADonner = min($quantiteRestante, $quantiteBesoin);
 
-            $don->insertDon($idBesoinFille, $quantiteADonner);
-            $besoin->updateBesoinById($b['id_Besoin'], $quantiteADonner);
+            $besoinData = $besoin->getBesoinById($b['id_Besoin']);
+            if ($besoinData) {
+                $don->insertDonAvecVille($idBesoinFille, $quantiteADonner, $besoinData['id_Ville']);
+                $besoin->updateBesoinById($b['id_Besoin'], $quantiteADonner);
+            }
 
             $quantiteRestante -= $quantiteADonner;
         }

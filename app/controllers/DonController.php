@@ -15,26 +15,34 @@ class DonController
         $besoin = new BesoinModel(Flight::db());
         $liste = $don->getAllDon();
         $listeBesoin = $besoin->getAllBesoin();
+        $listeCategorie = $besoin->getAllBesoinCategories();
+        
         Flight::render('donForm', [
             'listeBesoin' => $listeBesoin,
+            'listeCategorie' => $listeCategorie,
             'listeDon' => $liste,
             'baseUrl' => Flight::get('flight.base_url'),
         ]);
     }
 
-    // public function donner(){
-    //     $don= new DonModel(Flight::db());
+    public function donner(){
+        $don = new DonModel(Flight::db());
+        $besoin = new BesoinModel(Flight::db());
 
-    //     $donne = Flight::request()->data->dons; 
-    //     $quantite = Flight::request()->data->quantite;
+        $idBesoin = Flight::request()->data->dons; 
+        $quantite = Flight::request()->data->quantite;
 
-    //     $don->insertDon($donne, $quantite);
+        $besoinData = $besoin->getBesoinById($idBesoin);
+        
+        if (!$besoinData) {
+            Flight::halt(400, 'Besoin introuvable');
+        }
 
-    //     $besoin = new BesoinModel(Flight::db());
-    //     $besoin->updateBesoin($donne, $quantite);
+        $don->insertDonDirect($besoinData['id_Ville'], $besoinData['id_Besoin_Fille'], $quantite);
+        $besoin->updateBesoinById($idBesoin, $quantite);
 
-    //     Flight::redirect('/don');
-    // }
+        Flight::redirect('/don');
+    }
 
     // public function petitDons(){
     //     $don= new DonModel(Flight::db());
@@ -63,10 +71,10 @@ class DonController
         $don = new DonModel(Flight::db());
         $besoin = new BesoinModel(Flight::db());
 
-        $bf = Flight::request()->data->dons; 
+        $idBesoinFille = Flight::request()->data->dons; 
         $quantiteDonnee = (int)Flight::request()->data->quantite;
 
-        $besoins = $besoin->getBesoinbyBesoinFille($bf);
+        $besoins = $besoin->getBesoinbyBesoinFille($idBesoinFille);
 
         $quantiteRestante = $quantiteDonnee;
 
@@ -76,17 +84,14 @@ class DonController
             }
 
             $besoinVille = (int)$b['quantite'];
-
-            // On donne le minimum entre ce qui reste et le besoin de cette ville
             $quantiteADonner = min($quantiteRestante, $besoinVille);
 
             if($quantiteADonner > 0) {
-                $don->insertDon($b['id_Besoin_Fille'], $quantiteADonner, $b['id_Ville']);
-                $besoin->updateBesoin($b['id_Besoin'], $quantiteADonner);
+                $don->insertDonDirect($b['id_Ville'], $idBesoinFille, $quantiteADonner);
+                $besoin->updateBesoinById($b['id_Besoin'], $quantiteADonner);
                 $quantiteRestante -= $quantiteADonner;
             }
 
-            // On ne passe à la ville suivante que si le besoin de celle-ci est tombé à 0
             if($besoinVille - $quantiteADonner > 0) {
                 break;
             }
@@ -168,12 +173,11 @@ class DonController
         
         foreach($distributions as $dist){
             if ($dist['quantite_finale'] > 0) {
-                $don->insertDonProportionnel($dist['id_Ville'], $idBesoinFille, $dist['quantite_finale']);
+                $don->insertDonDirect($dist['id_Ville'], $idBesoinFille, $dist['quantite_finale']);
                 $besoinmodel->updateBesoinById($dist['id_Besoin'], $dist['quantite_finale']);
             }
         }
 
         Flight::redirect('/don');
     }
-
 }

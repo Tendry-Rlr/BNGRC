@@ -121,7 +121,7 @@ class BesoinModel
     }
     public function listebesoinProche($idBesoinFille)
     {
-        $sql = "select quantite, id_Besoin from Besoin where id_Besoin_Fille = :id order by id_Besoin desc";
+        $sql = "select quantite, id_Besoin, id_Ville from Besoin where id_Besoin_Fille = :id order by id_Besoin desc";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idBesoinFille]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
