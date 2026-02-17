@@ -59,35 +59,36 @@ class DonController
     //     Flight::redirect('/don');
     // } 
 
-    public function petitDons(){
+    public function petitDons()
+    {
         $don = new DonModel(Flight::db());
         $besoin = new BesoinModel(Flight::db());
 
-        $bf = Flight::request()->data->dons; 
-        $quantiteDonnee = (int)Flight::request()->data->quantite;
+        $bf = Flight::request()->data->dons;
+        $quantiteDonnee = (int) Flight::request()->data->quantite;
 
         $besoins = $besoin->getBesoinbyBesoinFille($bf);
 
         $quantiteRestante = $quantiteDonnee;
 
-        foreach($besoins as $b) {
-            if($quantiteRestante <= 0) {
+        foreach ($besoins as $b) {
+            if ($quantiteRestante <= 0) {
                 break;
             }
 
-            $besoinVille = (int)$b['quantite'];
+            $besoinVille = (int) $b['quantite'];
 
             // On donne le minimum entre ce qui reste et le besoin de cette ville
             $quantiteADonner = min($quantiteRestante, $besoinVille);
 
-            if($quantiteADonner > 0) {
+            if ($quantiteADonner > 0) {
                 $don->insertDon($b['id_Besoin_Fille'], $quantiteADonner, $b['id_Ville']);
                 $besoin->updateBesoin($b['id_Besoin'], $quantiteADonner);
                 $quantiteRestante -= $quantiteADonner;
             }
 
             // On ne passe à la ville suivante que si le besoin de celle-ci est tombé à 0
-            if($besoinVille - $quantiteADonner > 0) {
+            if ($besoinVille - $quantiteADonner > 0) {
                 break;
             }
         }
@@ -95,18 +96,19 @@ class DonController
         Flight::redirect('/don');
     }
 
-    public function proportionnelle(){
+    public function proportionnelle()
+    {
         $don = new DonModel(Flight::db());
         $besoinmodel = new BesoinModel(Flight::db());
 
-        $idBesoinFille = Flight::request()->data->dons; 
+        $idBesoinFille = Flight::request()->data->dons;
         $quantiteDonnee = Flight::request()->data->quantite;
 
         $quantiteDonnee = is_string($quantiteDonnee) ? str_replace(',', '.', $quantiteDonnee) : $quantiteDonnee;
-        if (!is_numeric($quantiteDonnee) || (float)$quantiteDonnee <= 0) {
+        if (!is_numeric($quantiteDonnee) || (float) $quantiteDonnee <= 0) {
             Flight::halt(400, 'Quantité invalide');
         }
-        $quantiteDonnee = (float)$quantiteDonnee;
+        $quantiteDonnee = (float) $quantiteDonnee;
 
         $besoins = $don->getBesoinsByBesoinFille($idBesoinFille);
 
@@ -116,11 +118,11 @@ class DonController
 
         $besoinsFiltres = [];
         $totalDemandes = 0.0;
-        
-        foreach($besoins as $b){
+
+        foreach ($besoins as $b) {
             $qte = is_string($b['quantite']) ? str_replace(',', '.', $b['quantite']) : $b['quantite'];
-            if (is_numeric($qte) && (float)$qte > 0) {
-                $qteFloat = (float)$qte;
+            if (is_numeric($qte) && (float) $qte > 0) {
+                $qteFloat = (float) $qte;
                 $besoinsFiltres[] = [
                     'id_Besoin' => $b['id_Besoin'],
                     'id_Ville' => $b['id_Ville'],
@@ -134,42 +136,17 @@ class DonController
             Flight::halt(400, 'Total des demandes invalide');
         }
 
-        $distributions = [];
-        $totalFloor = 0;
-        
-        foreach($besoinsFiltres as $index => $besoin){
-            $quantiteExacte = ($besoin['quantite'] / $totalDemandes) * $quantiteDonnee;
-            $quantiteFloor = (int)floor($quantiteExacte);
-            $decimal = $quantiteExacte - $quantiteFloor;
-            
-            $distributions[] = [
-                'id_Besoin' => $besoin['id_Besoin'],
-                'id_Ville' => $besoin['id_Ville'],
-                'quantite_exacte' => $quantiteExacte,
-                'quantite_floor' => $quantiteFloor,
-                'decimal' => $decimal,
-                'quantite_finale' => $quantiteFloor
-            ];
-            
-            $totalFloor += $quantiteFloor;
-        }
+        $totalDistribue = 0.0;
 
-        $reste = (int)$quantiteDonnee - $totalFloor;
-        
-        if ($reste > 0) {
-            usort($distributions, function($a, $b) {
-                return $b['decimal'] <=> $a['decimal'];
-            });
-            
-            for ($i = 0; $i < $reste && $i < count($distributions); $i++) {
-                $distributions[$i]['quantite_finale']++;
-            }
-        }
-        
-        foreach($distributions as $dist){
-            if ($dist['quantite_finale'] > 0) {
-                $don->insertDonProportionnel($dist['id_Ville'], $idBesoinFille, $dist['quantite_finale']);
-                $besoinmodel->updateBesoinById($dist['id_Besoin'], $dist['quantite_finale']);
+        foreach ($besoinsFiltres as $besoin) {
+            $proportion = $besoin['quantite'] / $totalDemandes;
+            $quantiteCalculee = $proportion * $quantiteDonnee;
+            $quantitePourVille = (int) floor($quantiteCalculee);
+
+            if ($quantitePourVille > 0) {
+                $don->insertDonProportionnel($besoin['id_Ville'], $idBesoinFille, $quantitePourVille);
+                $besoinmodel->updateBesoinByIdProportionnel($besoin['id_Besoin'], $quantitePourVille);
+                $totalDistribue += $quantitePourVille;
             }
         }
 
