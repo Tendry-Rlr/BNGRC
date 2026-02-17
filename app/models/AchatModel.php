@@ -131,14 +131,15 @@ class AchatModel
 
     public function getAchatByVille($idville)
     {
-        // Récupère les achats pour une ville en joignant les informations de besoin, ville et région
-        $sql = "SELECT a.*, b.nom_Besoin, b.quantite as quantite_besoin, v.nom_Ville, r.nom_Region, d.date_Dispatch as date_dispatch
-            FROM Achat a
-            LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin
-            LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
-            LEFT JOIN Region r ON v.id_Region = r.id_Region
-            LEFT JOIN Don d ON a.id_Don = d.id_Don
-            WHERE v.id_Ville = :id";
+        $sql = "SELECT a.id_Achat, a.quantite, a.montant, a.date,
+                       b.nom_Besoin, b.id_Ville,
+                       v.nom_Ville, r.nom_Region
+                FROM Achat a
+                LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin
+                LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
+                LEFT JOIN Region r ON v.id_Region = r.id_Region
+                WHERE v.id_Ville = :id
+                ORDER BY a.date DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idville]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -146,13 +147,14 @@ class AchatModel
 
     public function getAllAchatDetails()
     {
-        // Récupère tous les achats avec détails (besoin, ville, région, date)
-        $sql = "SELECT a.*, b.nom_Besoin, b.quantite as quantite_besoin, v.nom_Ville, r.nom_Region, d.date_Dispatch as date_dispatch
-            FROM Achat a
-            LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin
-            LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
-            LEFT JOIN Region r ON v.id_Region = r.id_Region
-            LEFT JOIN Don d ON a.id_Don = d.id_Don";
+        $sql = "SELECT a.id_Achat, a.quantite, a.montant, a.date,
+                       b.nom_Besoin, b.id_Ville,
+                       v.nom_Ville, r.nom_Region
+                FROM Achat a
+                LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin
+                LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
+                LEFT JOIN Region r ON v.id_Region = r.id_Region
+                ORDER BY a.date DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
