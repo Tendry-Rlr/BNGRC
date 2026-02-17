@@ -59,7 +59,7 @@ class BesoinModel
             ':nombesoin' => $nom,
         ]);
     }
-    
+
     public function getBesoinById($id)
     {
         $sql = "SELECT * FROM V_Besoin where id_Besoin = :id";
@@ -68,23 +68,34 @@ class BesoinModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getBesoinRestant(){
+    public function getBesoinRestant()
+    {
         $sql = "SELECT * FROM V_Besoin WHERE quantite > 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getSumBesoinRestant(){
+    public function getSumBesoinRestant()
+    {
         $sql = "SELECT COALESCE(SUM(prix_Unitaire * quantite), 0) AS sum FROM V_Besoin WHERE quantite > 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);   
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateBesoin($id, $quantite){
+    public function updateBesoin($id, $quantite)
+    {
         $sql = "update Besoin set quantite = quantite - :qte where id_Besoin_Fille = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':qte' => $quantite, ':id' => $id]);
+    }
+
+    public function listebesoinProche($idBesoinFille)
+    {
+        $sql = "select quantite, id_Besoin from V_Besoin where id_Besoin_Fille = :id order by id_Besoin desc";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $idBesoinFille]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

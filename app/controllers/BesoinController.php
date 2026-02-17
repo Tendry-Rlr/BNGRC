@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\BesoinModel;
+use app\models\DonModel;
 use app\models\VilleModel;
 use Flight;
 
@@ -17,7 +18,7 @@ class BesoinController
 
         $besoin = new BesoinModel(Flight::db());
         $besoin->saveBesoin($id_besoin_categorie, $id_ville, $quantite, $nom);
-        Flight::redirect('/besoinville/'. $id_ville);
+        Flight::redirect('/besoinville/' . $id_ville);
     }
 
     public function loadInsert()
@@ -33,5 +34,25 @@ class BesoinController
             'villes' => $villes,
             'baseUrl' => Flight::get('flight.base_url'),
         ]);
+    }
+
+    public function besoinProche()
+    {
+        $quantite = Flight::request()->data->quantite;
+        $idBesoinFille = Flight::request()->data->dons;
+
+        $besoin = new BesoinModel(Flight::db());
+        $bp = $besoin->listebesoinProche($idBesoinFille);
+
+        $don = new DonModel(Flight::db());
+        foreach ($bp as $b) {
+            if ($quantite === 0) {
+                break;
+            }
+            $quantite = $quantite - $b['quantite'];
+            $don->insertDon($idBesoinFille, $b['quantite']);
+            $besoin->updateBesoin($idBesoinFille, $b['quantite']);
+        }
+        Flight::render('/don');
     }
 }

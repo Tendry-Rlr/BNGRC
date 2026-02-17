@@ -58,7 +58,7 @@ $baseUrl = $baseUrl ?? '';
 
             <div class="row">
               <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/valider" type="submit">
+                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/besoinproche" type="submit">
                   Mode le plus proche
                 </button>
               </div>
