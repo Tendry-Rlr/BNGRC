@@ -219,7 +219,6 @@ INSERT INTO Achat_Attente (id_Achat_Attente, id_Ville, id_Besoin, quantite, date
     (5, 1, 2, 30.0, '2026-02-18', 45.00);
 
         ";
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
