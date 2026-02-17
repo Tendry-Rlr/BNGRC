@@ -63,7 +63,7 @@ $baseUrl = $baseUrl ?? '';
                 </button>
               </div>
               <div class="col-md-3">
-                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/valider" type="submit">
+                <button class="btn btn-primary btn-lg w-100" formaction="<?= $baseUrl ?>/petiDon" type="submit">
                   Mode croissant
                 </button>
               </div>

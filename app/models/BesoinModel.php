@@ -16,7 +16,7 @@ class BesoinModel
 
     public function getAllBesoin()
     {
-        $sql = "SELECT * FROM V_Besoin";
+        $sql = "SELECT * FROM V_Besoin group by id_Besoin_Fille";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,9 +82,15 @@ class BesoinModel
     }
 
     public function updateBesoin($id, $quantite){
-        $sql = "update Besoin set quantite = quantite - :qte where id_Besoin_Fille = :id";
+        $sql = "update Besoin set quantite = quantite - :qte where id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':qte' => $quantite, ':id' => $id]);
     }
 
+    public function getBesoinbyBesoinFille($id_Besoin){
+        $sql = "SELECT * FROM Besoin where id_Besoin_Fille = :id order by quantite asc";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id_Besoin]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

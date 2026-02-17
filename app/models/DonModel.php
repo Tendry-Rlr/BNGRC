@@ -27,20 +27,20 @@ class DonModel
         $sql = "SELECT id_Ville FROM V_DonParVille where id_Besoin_Fille = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id_besoin]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['id_Ville'];
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
-    public function insertDon($idBesoin, $quantite)
+    public function insertDon($idBesoin, $quantite, $idVille)
     {
-        $idVille = $this->getVillebyDon($idBesoin);
 
         $sql = "INSERT INTO Don (id_Besoin_Fille, quantite, id_Ville, date_Dispatch) VALUES (:besoin_id, :quantite, :ville_id, NOW())";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([
+        $stmt->execute([
             ':besoin_id' => $idBesoin,
             ':ville_id' => $idVille,
             ':quantite' => $quantite
         ]);
+
     }
     public function getDonByVille($idVille)
     {
@@ -59,4 +59,7 @@ class DonModel
         $liste = $stmt->fetch(PDO::FETCH_ASSOC);
         return $liste;
     }
+
+    
+    
 }
