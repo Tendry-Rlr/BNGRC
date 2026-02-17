@@ -45,7 +45,7 @@ class BesoinController
         $bp = $besoin->listebesoinProche($idBesoinFille);
 
         $don = new DonModel(Flight::db());
-        $quantiteRestante = $quantite; // Quantité restante à distribuer
+        $quantiteRestante = $quantite;
 
         foreach ($bp as $b) {
             if ($quantiteRestante <= 0) {
@@ -54,19 +54,14 @@ class BesoinController
 
             $quantiteBesoin = floatval($b['quantite']);
             if ($quantiteBesoin <= 0) {
-                continue; // Passer au suivant si ce besoin est déjà satisfait
+                continue;
             }
 
-            // Calculer combien on peut donner à ce besoin
             $quantiteADonner = min($quantiteRestante, $quantiteBesoin);
 
-            // Insérer le don avec la quantité réellement donnée
             $don->insertDon($idBesoinFille, $quantiteADonner);
-
-            // Diminuer la quantité du besoin
             $besoin->updateBesoinById($b['id_Besoin'], $quantiteADonner);
 
-            // Diminuer la quantité restante à distribuer
             $quantiteRestante -= $quantiteADonner;
         }
 
