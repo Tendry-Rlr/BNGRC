@@ -12,7 +12,7 @@ $baseUrl = $baseUrl ?? '';
 </div>
 
 <div class="row g-3 mb-4">
-  <div class="col-sm-6">
+  <div class="col-sm-4">
     <div class="card h-100 text-white bg-success">
       <div class="card-body d-flex align-items-center">
         <div class="flex-grow-1">
@@ -22,11 +22,21 @@ $baseUrl = $baseUrl ?? '';
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
+    <div class="card h-100 text-white bg-warning">
+      <div class="card-body d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="card-subtitle mb-1">Montant besoins satisfaits</div>
+          <div class="h4 fw-bold" id="besoin-sum-satisfait"><?= number_format($besoinSumSatisfait['sum'] ?? 0, 2) ?> Ar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
     <div class="card h-100 text-white bg-primary">
       <div class="card-body d-flex align-items-center">
         <div class="flex-grow-1">
-          <div class="card-subtitle mb-1">Montant besoins totaux et satisfaits</div>
+          <div class="card-subtitle mb-1">Montant achats totaux</div>
           <div class="h4 fw-bold" id="achat-sum-totaux"><?= number_format($achatSumTotaux[0]['sum'] ?? 0, 2) ?> Ar</div>
         </div>
       </div>
@@ -65,6 +75,40 @@ $baseUrl = $baseUrl ?? '';
                       <td><a href="<?= $baseUrl ?>/achat/<?= $l['id_Besoin'] ?>" class="btn btn-success">Acheter</a></td>
                     </form>
                   <?php } ?>
+                </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="lead">
+  Liste des besoins satisfaits
+</p>
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card card-modern">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th><i class="bi bi-tag"></i> Catégorie</th>
+                <th><i class="bi bi-box"></i> Besoin</th>
+                <th><i class="bi bi-currency-dollar"></i> Prix unitaire</th>
+                <th><i class="bi bi-check-circle"></i> Statut</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-besoin-satisfait">
+              <?php foreach (($besoinSatisfait ?? []) as $l) { ?>
+                <tr>
+                  <td><span class="badge bg-warning"><?= htmlspecialchars($l['categorie_libelle']) ?></span></td>
+                  <td><strong><?= htmlspecialchars($l['nom_Besoin']) ?></strong></td>
+                  <td><?= number_format($l['prix_Unitaire'], 2) ?> Ar</td>
+                  <td><span class="badge bg-success">Satisfait</span></td>
                 </tr>
               <?php } ?>
             </tbody>

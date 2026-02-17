@@ -22,24 +22,28 @@ class AchatModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // public function getPrixDon($idville, $id_besoin)
-    // {
-    //     $besoin = new BesoinModel(Flight::db());
-    //     $besoinById = $besoin->getBesoinById($id_besoin)['id_Besoin_Fille'];
 
-    //     $don = new DonModel(Flight::db());
-    //     $prixDon = $don->getDonByIdBesoinFille($besoinById)['quantite'];
-    //     return $prixDon;
-    // }
+    public function hasDonArgent($idville)
+    {
+        $sql = "SELECT COUNT(*) AS nb FROM V_DonParVille WHERE id_Ville = :id AND nom_produit = 'Argent'";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $idville]);
+        return (int)($stmt->fetch(PDO::FETCH_ASSOC)['nb'] ?? 0) > 0;
+    }
 
     public function getPrixDon($idville)
     {
-        $sql = "select quantite_don from V_DonParVille where id_Ville = :id and nom_produit = 'Argent'";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':id' => $idville]);
+        $sqlDon = "SELECT COALESCE(SUM(quantite_don), 0) AS total_don FROM V_DonParVille WHERE id_Ville = :id AND nom_produit = 'Argent'";
+        $stmtDon = $this->db->prepare($sqlDon);
+        $stmtDon->execute([':id' => $idville]);
+        $totalDon = (float)($stmtDon->fetch(PDO::FETCH_ASSOC)['total_don'] ?? 0);
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['quantite_don'] ?? 0;
+        $sqlAchat = "SELECT COALESCE(SUM(prix), 0) AS total_achat FROM Achat_Attente WHERE id_Ville = :id";
+        $stmtAchat = $this->db->prepare($sqlAchat);
+        $stmtAchat->execute([':id' => $idville]);
+        $totalAchat = (float)($stmtAchat->fetch(PDO::FETCH_ASSOC)['total_achat'] ?? 0);
+
+        return $totalDon - $totalAchat;
     }
 
     protected function getPourcentageByCategory($id_besoin_categorie)
@@ -54,7 +58,6 @@ class AchatModel
 
     public function saveAchat($id_besoin, $id_besoin_categorie, $id_ville, $quantite, $pU, $quantite_besoin)
     {
-        // Validation 1 : Quantité ne doit pas dépasser la quantité du besoin
         if ($quantite > $quantite_besoin) {
             return [
                 'success' => false,
@@ -66,27 +69,30 @@ class AchatModel
         $pourcentage = $this->getPourcentageByCategory($id_besoin_categorie);
         $prixFrais = $prix + ($prix * $pourcentage);
 
-        // Validation 2 : Prix avec frais ne doit pas dépasser le montant total des dons
         $prixDonTotal = $this->getPrixDon($id_ville);
-        if ($prixDonTotal === 0) {
+        if (!$this->hasDonArgent($id_ville)) {
             return [
                 'success' => false,
                 'error' => "Cette ville n'a pas encore reçu de don en argent."
             ];
         }
+        if ($prixDonTotal <= 0) {
+            return [
+                'success' => false,
+                'error' => "Cette ville n'a plus d'argent disponible pour effectuer des achats."
+            ];
+        }
         if ($prixFrais > $prixDonTotal) {
             return [
                 'success' => false,
-                'error' => 'Le prix avec frais (' . number_format((float) $prixFrais, 2) . ' Ar) dépasse le montant des dons disponibles (' . number_format((float) $prixDonTotal, 2) . ' Ar)'
+                'error' => 'Le prix avec frais (' . number_format((float) $prixFrais, 2) . ' Ar) dépasse le solde disponible (' . number_format((float) $prixDonTotal, 2) . ' Ar)'
             ];
         }
 
-        // Si toutes les validations passent, insérer dans Achat_Attente
         $sql = "insert into Achat_Attente
             (id_Ville, id_Besoin, date_dispatch, quantite, prix) values
             (:idv, :idb, NOW(), :qtte, :prix)
         ";
-        // recalculer le prix avec les mêmes règles mais via la méthode interne
         $prix = $pU * $quantite;
         $pourcentage = $this->getPourcentageByCategory($id_besoin_categorie);
         $prixFrais = $prix + ($prix * $pourcentage);
@@ -98,6 +104,10 @@ class AchatModel
             ':qtte' => $quantite,
             ':prix' => $prixFrais,
         ]);
+
+        $sqlUpdateBesoin = "UPDATE Besoin SET quantite = quantite - :qte WHERE id_Besoin = :id";
+        $stmtUpdate = $this->db->prepare($sqlUpdateBesoin);
+        $stmtUpdate->execute([':qte' => $quantite, ':id' => $id_besoin]);
 
         return [
             'success' => true,
@@ -131,7 +141,6 @@ class AchatModel
 
     public function getAchatByVille($idville)
     {
-        // Récupère les achats pour une ville en joignant les informations de besoin, ville et région
         $sql = "SELECT a.*, b.nom_Besoin, b.quantite as quantite_besoin, v.nom_Ville, r.nom_Region, d.date_Dispatch as date_dispatch
             FROM Achat a
             LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin
@@ -146,7 +155,6 @@ class AchatModel
 
     public function getAllAchatDetails()
     {
-        // Récupère tous les achats avec détails (besoin, ville, région, date)
         $sql = "SELECT a.*, b.nom_Besoin, b.quantite as quantite_besoin, v.nom_Ville, r.nom_Region, d.date_Dispatch as date_dispatch
             FROM Achat a
             LEFT JOIN Besoin b ON a.id_Besoin = b.id_Besoin

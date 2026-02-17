@@ -16,12 +16,11 @@ class BesoinModel
 
     public function getAllBesoin()
     {
-        // Retourne un seul enregistrement par id_Besoin_Fille
-        // en prenant le besoin le plus récent (MAX(id_Besoin)).
         $sql = "SELECT v.* FROM V_Besoin v
                 JOIN (
                     SELECT id_Besoin_Fille, MAX(id_Besoin) AS max_id
                     FROM V_Besoin
+                    WHERE quantite > 0
                     GROUP BY id_Besoin_Fille
                 ) x ON v.id_Besoin_Fille = x.id_Besoin_Fille AND v.id_Besoin = x.max_id
                 ORDER BY v.id_Besoin_Fille";
@@ -40,7 +39,7 @@ class BesoinModel
 
     public function getBesoinByVille($id_ville)
     {
-        $sql = "SELECT * FROM V_Besoin where id_Ville = :id";
+        $sql = "SELECT * FROM V_Besoin where id_Ville = :id AND quantite > 0";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id_ville]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -125,6 +124,24 @@ class BesoinModel
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idBesoinFille]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getBesoinSatisfait()
+    {
+        $sql = "SELECT * FROM V_Besoin WHERE quantite <= 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getSumBesoinSatisfait()
+    {
+        $sql = "SELECT COALESCE(SUM(aa.prix), 0) AS sum 
+                FROM Achat_Attente aa 
+                WHERE aa.id_Besoin IN (SELECT id_Besoin FROM Besoin WHERE quantite <= 0)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 }
