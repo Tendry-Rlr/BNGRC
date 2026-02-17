@@ -85,14 +85,14 @@ class BesoinModel
 
     public function updateBesoin($id, $quantite)
     {
-        $sql = "update Besoin set quantite = quantite - :qte where id_Besoin_Fille = :id";
+        $sql = "update Besoin set quantite = quantite - :qte where id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':qte' => $quantite, ':id' => $id]);
     }
 
     public function listebesoinProche($idBesoinFille)
     {
-        $sql = "select quantite, id_Besoin from V_Besoin where id_Besoin_Fille = :id order by id_Besoin desc";
+        $sql = "select quantite, id_Besoin from Besoin where id_Besoin_Fille = :id order by id_Besoin desc";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idBesoinFille]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

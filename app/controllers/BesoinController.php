@@ -51,8 +51,8 @@ class BesoinController
             }
             $quantite = $quantite - $b['quantite'];
             $don->insertDon($idBesoinFille, $b['quantite']);
-            $besoin->updateBesoin($idBesoinFille, $b['quantite']);
+            $besoin->updateBesoin($b['id_Besoin'], $b['quantite']);
         }
-        Flight::render('/don');
+        Flight::redirect('/don');
     }
 }
