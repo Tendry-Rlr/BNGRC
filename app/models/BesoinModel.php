@@ -16,7 +16,15 @@ class BesoinModel
 
     public function getAllBesoin()
     {
-        $sql = "SELECT * FROM V_Besoin group by id_Besoin_Fille";
+        // Retourne un seul enregistrement par id_Besoin_Fille
+        // en prenant le besoin le plus récent (MAX(id_Besoin)).
+        $sql = "SELECT v.* FROM V_Besoin v
+                JOIN (
+                    SELECT id_Besoin_Fille, MAX(id_Besoin) AS max_id
+                    FROM V_Besoin
+                    GROUP BY id_Besoin_Fille
+                ) x ON v.id_Besoin_Fille = x.id_Besoin_Fille AND v.id_Besoin = x.max_id
+                ORDER BY v.id_Besoin_Fille";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
