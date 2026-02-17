@@ -60,10 +60,16 @@ class SimulationModel
         $st->execute(['id' => $idAttente]);
     }
 
-    public function annuler($id){
-        $sql = "DELETE FROM Achat_Attente WHERE id_Achat_Attente = :id";
+    public function annuler($attente, $idAttente){
+        // 1. Restaurer la quantité du besoin
+        $sql = "UPDATE Besoin SET quantite = quantite + :qte WHERE id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['id' => $id]);
+        $stmt->execute(['qte' => $attente['quantite'], 'id' => $attente['id_Besoin']]);
+
+        // 2. Supprimer l'attente
+        $del = "DELETE FROM Achat_Attente WHERE id_Achat_Attente = :id";
+        $st = $this->db->prepare($del);
+        $st->execute(['id' => $idAttente]);
     }
 
 }
