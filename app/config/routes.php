@@ -11,6 +11,7 @@ use app\controllers\BesoinController;
 use app\controllers\SimulationController;
 use app\controllers\AchatController;
 use app\controllers\RecapitulationController;
+use app\controllers\ReinitController;
 
 
 /**     
@@ -37,6 +38,7 @@ $router->group('', function (Router $router) use ($app) {
     $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
     $router->get('/addbesoin', [$besoin, 'loadInsert']);
     $router->post('/insertBesoin', [$besoin, 'insertBesoin']);
+    $router->post('/besoinproche', [$besoin, 'besoinProche']);
 
     $simulation = new SimulationController();
     $router->get('/simulation', [$simulation, 'getSimulation']);
@@ -51,5 +53,10 @@ $router->group('', function (Router $router) use ($app) {
 
     $recapitulation = new RecapitulationController();
     $router->get('/recapitulation', [$recapitulation, 'recapitulation']);
+
+    $router->post('/donProp', [$don, 'proportionnelle']);
+
+    $reinit = new ReinitController();
+    $router->get('/reinitialize', [$reinit, 'reinit']);
 
 }, [SecurityHeadersMiddleware::class]);
