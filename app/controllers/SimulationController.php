@@ -54,4 +54,14 @@ class SimulationController
             'baseUrl' => Flight::get('flight.base_url'),
         ]);
     }
+
+    public function annuler(){
+        $simulationModel = new SimulationModel(Flight::db());
+
+        $id = Flight::request()->data->attente;
+
+        $simulationModel->annuler($id);
+
+        Flight::redirect('/simulation');
+    }
 }

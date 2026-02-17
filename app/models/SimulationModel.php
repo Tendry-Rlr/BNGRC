@@ -54,4 +54,10 @@ class SimulationModel
         $st->execute(['id' => $id]);
     }
 
+    public function annuler($id){
+        $sql = "DELETE FROM Achat_Attente WHERE id_Achat_Attente = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+    }
+
 }

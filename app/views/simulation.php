@@ -49,8 +49,12 @@ $baseUrl = $baseUrl ?? '';
                                 <i class="bi bi-activity"></i> Simuler
                             </button>
                             <button type="submit" formaction="<?= $baseUrl ?>/valider"
-                                class="btn btn-secondary btn-lg w-100">
-                                <i class="bi bi-currency-dollar"></i> Valider
+                                class="btn btn-success btn-lg w-100">
+                                <i class="bi bi-check-circle"></i> Valider
+                            </button>
+                            <button type="submit" formaction="<?= $baseUrl ?>/annuler"
+                                class="btn btn-danger btn-lg w-100">
+                                <i class="bi bi-x-circle"></i> Annuler
                             </button>
                         </div>
                     </div>
