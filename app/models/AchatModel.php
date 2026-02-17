@@ -34,12 +34,12 @@ class AchatModel
 
     public function getPrixDon($idville)
     {
-        $sql = "select quantite_Don from V_DonParVille where id_Ville = :id and nom_Produit = 'Argent'";
+        $sql = "select quantite_don from V_DonParVille where id_Ville = :id and nom_produit = 'Argent'";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idville]);
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['quantite_Don'] ?? 0;
+        return $result['quantite_don'] ?? 0;
     }
 
     protected function getPourcentageByCategory($id_besoin_categorie)
@@ -113,7 +113,7 @@ class AchatModel
     }
 
     public function getSumAchatTotaux(){
-        $sql = "select sum(montant) as sum  from Achat where id_Besoin in (select id_Besoin from Besoin where quantite = 0)";
+        $sql = "select COALESCE(sum(montant), 0) as sum from Achat where id_Besoin in (select id_Besoin from Besoin where quantite = 0)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);  
