@@ -37,6 +37,7 @@ $router->group('', function (Router $router) use ($app) {
     $router->get('/besoinville/@id', [$besoin , 'listeBesoinByVille']);
     $router->get('/addbesoin', [$besoin, 'loadInsert']);
     $router->post('/insertBesoin', [$besoin, 'insertBesoin']);
+    $router->post('/besoinproche', [$besoin, 'besoinProche']);
 
     $simulation = new SimulationController();
     $router->get('/simulation', [$simulation, 'getSimulation']);
