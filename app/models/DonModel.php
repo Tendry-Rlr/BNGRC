@@ -28,8 +28,6 @@ class DonModel
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id_besoin]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($result === false) {
             return null; // ou throw new Exception("Ville introuvable pour le besoin $id_besoin");
@@ -39,12 +37,6 @@ class DonModel
     }
     public function insertDon($idBesoin, $quantite, $idVille)
     {
-        $idVille = $this->getVillebyDon($idBesoin);
-        
-        if ($idVille === null) {
-            error_log("Impossible d'insérer le don: ville introuvable pour le besoin $idBesoin");
-            return false;
-        }
 
         $sql = "INSERT INTO Don (id_Besoin_Fille, quantite, id_Ville, date_Dispatch) VALUES (:besoin_id, :quantite, :ville_id, NOW())";
         $stmt = $this->db->prepare($sql);

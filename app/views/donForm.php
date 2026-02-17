@@ -13,26 +13,6 @@ $baseUrl = $baseUrl ?? '';
         </h4>
         <p class="text-muted">Sélectionnez le produit et la quantité que vous souhaitez donner</p>
 
-        <?php
-        // build categories list: prefer $listeCategorie if provided, otherwise extract from $listeBesoin
-        $categories = [];
-        if (!empty($listeCategorie)) {
-          foreach ($listeCategorie as $c) {
-            $cid = $c['id_Besoin_Categorie'] ?? $c['id'] ?? null;
-            $cl = $c['libelle'] ?? $c['categorie_libelle'] ?? $c['nom'] ?? '';
-            if ($cid !== null)
-              $categories[$cid] = $cl;
-          }
-        } else {
-          foreach (($listeBesoin ?? []) as $b) {
-            $cid = $b['id_Besoin_Categorie'] ?? $b['id_BesoinCategorie'] ?? null;
-            $cl = $b['categorie_libelle'] ?? $b['libelle'] ?? null;
-            if ($cid !== null && $cl !== null)
-              $categories[$cid] = $cl;
-          }
-        }
-        ?>
-
         <form method="post" action="<?= $baseUrl ?>/donner">
           <div class="row g-3 align-items-end">
             <div class="col-md-5">
