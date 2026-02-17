@@ -27,8 +27,9 @@ $router->group('', function (Router $router) use ($app) {
 
     $don = new DonController();
     $router->get('/don', [$don, 'listeDon']);
-    $router->post('/donner', [$don, 'donner']);
-    
+    // $router->post('/donner', [$don, 'donner']);
+    $router->post('/petiDon', [$don, 'petitDons']);
+
     $ville = new VilleController();
     $router->get('/ville/@id' , [$ville, 'listeVilleByRegion']);
     $router->get('/besoinville/@id', [$ville , 'listeBesoinByVille']);

@@ -38,21 +38,33 @@ class BesoinController
 
     public function besoinProche()
     {
-        $quantite = Flight::request()->data->quantite;
+        $quantite = floatval(Flight::request()->data->quantite);
         $idBesoinFille = Flight::request()->data->dons;
 
         $besoin = new BesoinModel(Flight::db());
         $bp = $besoin->listebesoinProche($idBesoinFille);
 
         $don = new DonModel(Flight::db());
+        $quantiteRestante = $quantite;
+
         foreach ($bp as $b) {
-            if ($quantite === 0) {
+            if ($quantiteRestante <= 0) {
                 break;
             }
-            $quantite = $quantite - $b['quantite'];
-            $don->insertDon($idBesoinFille, $b['quantite']);
-            $besoin->updateBesoin($b['id_Besoin'], $b['quantite']);
+
+            $quantiteBesoin = floatval($b['quantite']);
+            if ($quantiteBesoin <= 0) {
+                continue;
+            }
+
+            $quantiteADonner = min($quantiteRestante, $quantiteBesoin);
+
+            $don->insertDon($idBesoinFille, $quantiteADonner);
+            $besoin->updateBesoinById($b['id_Besoin'], $quantiteADonner);
+
+            $quantiteRestante -= $quantiteADonner;
         }
+
         Flight::redirect('/don');
     }
 }

@@ -21,18 +21,18 @@ SELECT
     d.date_Dispatch AS date_dispatch,
     bc.libelle AS categorie_libelle,
     bf.prix_Unitaire AS prix_unitaire,
-    b.nom_Besoin AS nom_produit,
-    b.id_Ville AS id_Ville,
+    (SELECT b.nom_Besoin FROM Besoin b 
+     WHERE b.id_Besoin_Fille = d.id_Besoin_Fille 
+     AND b.id_Ville = d.id_Ville LIMIT 1) AS nom_produit,
+    d.id_Ville AS id_Ville,
     v.nom_Ville AS nom_Ville,
     r.nom_Region AS nom_Region
 FROM Don d
 LEFT JOIN Besoin_Fille bf ON d.id_Besoin_Fille = bf.id_Besoin_Fille
-LEFT JOIN Besoin b ON bf.id_Besoin_Fille = b.id_Besoin_Fille
 LEFT JOIN Besoin_Categorie bc ON bf.id_Besoin_Categorie = bc.id_Besoin_Categorie
-LEFT JOIN Ville v ON b.id_Ville = v.id_Ville
+LEFT JOIN Ville v ON d.id_Ville = v.id_Ville
 LEFT JOIN Region r ON v.id_Region = r.id_Region
 ORDER BY d.date_Dispatch DESC;
-
 
 CREATE OR REPLACE VIEW V_AchatAttente AS
 SELECT

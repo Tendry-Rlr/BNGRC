@@ -16,7 +16,7 @@ class BesoinModel
 
     public function getAllBesoin()
     {
-        $sql = "SELECT * FROM V_Besoin";
+        $sql = "SELECT * FROM V_Besoin group by id_Besoin_Fille";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -99,7 +99,14 @@ class BesoinModel
         $stmt->execute([':qte' => $quantite, ':id' => $id]);
     }
 
-    public function updateBesoinByIdProportionnel($idBesoin, $quantite){
+    public function getBesoinbyBesoinFille($id_Besoin){
+        $sql = "SELECT * FROM Besoin where id_Besoin_Fille = :id order by quantite asc";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id' => $id_Besoin]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    // Diminue la quantité d'un besoin spécifique (par id_Besoin exact)
+    public function updateBesoinById($idBesoin, $quantite){
         $sql = "UPDATE Besoin SET quantite = quantite - :qte WHERE id_Besoin = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':qte' => $quantite, ':id' => $idBesoin]);
